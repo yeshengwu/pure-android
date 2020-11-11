@@ -58,6 +58,11 @@ public class TestAidlServer extends Service {
         public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
             Log.e(TAG,"basicTypes receive params : anInt = "+anInt+" aLong = "+aLong);
         }
+
+        @Override
+        public int add(int aInt, int bInt) throws RemoteException {
+            return aInt + bInt;
+        }
     };
 
 }
