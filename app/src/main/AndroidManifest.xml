@@ -16,6 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- android:process=":service"  -->
+        <service
+            android:name=".TestAidlServer"
+            android:enabled="true"
+            android:process=":service"
+            >
+        </service>
     </application>
 
 </manifest>
