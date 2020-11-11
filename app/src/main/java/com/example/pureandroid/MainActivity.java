@@ -40,8 +40,8 @@ public class MainActivity extends Activity {
                 try {
                     if (mMediaServer != null) {
                         mMediaServer.basicTypes(1, 100L, false, 0.5f, 1d, "string");
-                        int sum = mMediaServer.add(1,2);
-                        Log.e(TAG,"sum 1 + 2 = "+sum);
+//                        int sum = mMediaServer.add(1,2);
+//                        Log.e(TAG,"sum 1 + 2 = "+sum);
                     }
                 } catch (RemoteException e) {
                     e.printStackTrace();
