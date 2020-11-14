@@ -13,6 +13,30 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // log:
+    // output = ApkVariantOutputImpl_Decorated{apkData=Main{type=MAIN, fullName=debug, filters=[], versionCode=1, versionName=1.0}}.
+    //variant = com.android.build.gradle.internal.api.ApplicationVariantImpl_Decorated@4ccb5ae7.
+    //variant buildType = debug.
+    // output = ApkVariantOutputImpl_Decorated{apkData=Main{type=MAIN, fullName=release, filters=[], versionCode=1, versionName=1.0}}.
+    //variant = com.android.build.gradle.internal.api.ApplicationVariantImpl_Decorated@7a2da391.
+    //variant buildType = release.
+    // .....
+    // > Task :app:assembleDebug
+    //doLast
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            println "output = ${output}."
+            println "variant = ${variant}."
+            println "variant buildType = ${variant.buildType.name}."
+
+            output.getAssemble().doLast {
+                println "doLast "
+            }
+
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -28,4 +52,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    implementation project(path: ':mylibrary')
 }

@@ -13,6 +13,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mylibrary.TestB;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private IMyAidlInterface mMediaServer;
@@ -48,6 +52,10 @@ public class MainActivity extends Activity {
                 }
             }
         });
+
+        TestB dd = new TestB() {
+        };
+        AppCompatActivity compatActivity = new AppCompatActivity();
     }
 
     @Override

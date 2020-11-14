@@ -20,7 +20,6 @@
         <service
             android:name=".TestAidlServer"
             android:enabled="true"
-            android:process=":service"
             >
         </service>
     </application>
