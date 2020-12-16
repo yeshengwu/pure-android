@@ -62,6 +62,8 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void testTopicConcurrentException(){
+        // https://www.cnblogs.com/dolphin0520/p/3933551.html 源码分析，彻底根治这个问题
+//        https://juejin.cn/post/6844903569095671816
         List<String> test = new ArrayList<>();
         test.add("1");
         test.add("2");
@@ -70,11 +72,13 @@ public class ExampleInstrumentedTest {
 //        for (int i = 0; i < test.size(); i++) {
 //            String item = test.get(i);
 //            Log.e("evan","item = " + item + " size = "+test.size()+" i = "+i);
-//            if (item.equals("1")) {
+//            if (item.equals("3")) {
 //                test.remove(item);
+//                i--;
 //            }
 //            if (item.equals("2")) {
 //                test.remove(item);
+//                i--;
 //            }
 //        }
 //        Log.e("evan", "after" + test);
@@ -90,8 +94,8 @@ public class ExampleInstrumentedTest {
                 toRemove.add(item);
             }
         }
-        test.removeAll(toRemove);
-        Log.e("evan", "after" + test);
+//        test.removeAll(toRemove);
+//        Log.e("evan", "after" + test);
 
         Iterator<String> listIterator = test.iterator();
         while (listIterator.hasNext()) {
