@@ -55,8 +55,9 @@ public class TestAidlServer extends Service {
     private final IMyAidlInterface.Stub mBinder = new IMyAidlInterface.Stub() {
 
         @Override
-        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
+        public int basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
             Log.e(TAG,"basicTypes receive params : anInt = "+anInt+" aLong = "+aLong);
+            return anInt;
         }
     };
 
