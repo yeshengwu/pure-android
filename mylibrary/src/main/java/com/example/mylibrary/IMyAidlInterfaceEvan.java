@@ -8,29 +8,11 @@ package com.example.mylibrary;
 // evan add: 放入本地，可以格式化看代码结构//////////////////////////
 //////////////////////
 
-public interface IMyAidlInterface extends android.os.IInterface {
-    /**
-     * Default implementation for IMyAidlInterface.
-     */
-    public static class Default implements IMyAidlInterface {
-        /**
-         * Demonstrates some basic types that you can use as parameters
-         * and return values in AIDL.
-         */
-        @Override
-        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws android.os.RemoteException {
-        }
-
-        @Override
-        public android.os.IBinder asBinder() {
-            return null;
-        }
-    }
-
+public interface IMyAidlInterfaceEvan extends android.os.IInterface {
     /**
      * Local-side IPC implementation stub class.
      */
-    public static abstract class Stub extends android.os.Binder implements IMyAidlInterface {
+    public static abstract class Stub extends android.os.Binder implements IMyAidlInterfaceEvan {
         private static final String DESCRIPTOR = "com.example.pureandroid.IMyAidlInterface";
 
         /**
@@ -44,13 +26,13 @@ public interface IMyAidlInterface extends android.os.IInterface {
          * Cast an IBinder object into an com.example.pureandroid.IMyAidlInterface interface,
          * generating a proxy if needed.
          */
-        public static IMyAidlInterface asInterface(android.os.IBinder obj) {
+        public static IMyAidlInterfaceEvan asInterface(android.os.IBinder obj) {
             if ((obj == null)) {
                 return null;
             }
             android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
-            if (((iin != null) && (iin instanceof IMyAidlInterface))) {
-                return ((IMyAidlInterface) iin);
+            if (((iin != null) && (iin instanceof IMyAidlInterfaceEvan))) {
+                return ((IMyAidlInterfaceEvan) iin);
             }
             return new Proxy(obj);
         }
@@ -92,7 +74,7 @@ public interface IMyAidlInterface extends android.os.IInterface {
             }
         }
 
-        private static class Proxy implements IMyAidlInterface {
+        private static class Proxy implements IMyAidlInterfaceEvan {
             private android.os.IBinder mRemote;
 
             Proxy(android.os.IBinder remote) {
@@ -136,12 +118,12 @@ public interface IMyAidlInterface extends android.os.IInterface {
                 }
             }
 
-            public static IMyAidlInterface sDefaultImpl;
+            public static IMyAidlInterfaceEvan sDefaultImpl;
         }
 
         static final int TRANSACTION_basicTypes = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 
-        public static boolean setDefaultImpl(IMyAidlInterface impl) {
+        public static boolean setDefaultImpl(IMyAidlInterfaceEvan impl) {
             if (Proxy.sDefaultImpl == null && impl != null) {
                 Proxy.sDefaultImpl = impl;
                 return true;
@@ -149,7 +131,7 @@ public interface IMyAidlInterface extends android.os.IInterface {
             return false;
         }
 
-        public static IMyAidlInterface getDefaultImpl() {
+        public static IMyAidlInterfaceEvan getDefaultImpl() {
             return Proxy.sDefaultImpl;
         }
     }

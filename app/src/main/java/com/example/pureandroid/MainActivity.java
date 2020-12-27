@@ -89,9 +89,26 @@ public class MainActivity extends Activity {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.e(TAG, "service connected.ComponentName = " + name + " service = " + service);
+            Log.e(TAG, "service connected.ComponentName = " + name + " service = " + service+ " service.hashCode = "+service.hashCode());
 
             mMediaServer = IMyAidlInterface.Stub.asInterface(service);
+            Log.e(TAG, "service connected.mMediaServer = " + mMediaServer);
+            IBinder aBinder = mMediaServer.asBinder();
+            Log.e(TAG, "service connected.aBinder = " + aBinder);
+
+//            service.pingBinder()
+//            service.isBinderAlive();
+            try {
+                service.linkToDeath(new IBinder.DeathRecipient() {
+                    @Override
+                    public void binderDied() {
+                        Log.e(TAG, "service connected. binderDied");
+                    }
+                },0);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
         }
     };
 

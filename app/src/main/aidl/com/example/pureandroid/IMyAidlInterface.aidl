@@ -2,6 +2,8 @@
 package com.example.pureandroid;
 
 // Declare any non-default types here with import statements
+import android.content.pm.ActivityInfo;
+//import com.example.pureandroid.IApplicationCallback;
 
 interface IMyAidlInterface {
     /**
@@ -12,4 +14,7 @@ interface IMyAidlInterface {
             double aDouble, String aString);
 
 //    int add(int aInt,int bInt);
+// boolean unregisterApplicationCallback(in IApplicationCallback callback);
+
+//List<ActivityInfo> getReceivers(in String packageName ,int flags);
 }
