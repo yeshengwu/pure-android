@@ -53,14 +53,19 @@ public class TestEntry {
          */
         AbsBinderEvanStub stub = new AbsBinderEvanStub() {
 
+            @Override
+            public void add(int a, int b) {
+                System.out.println("stub instance IN add:  a = " +a + " b = " +b);
+            }
+
             @NonNull
             @Override
             public String toString() {
                 return "stub toString";
             }
         };
-
-        System.out.println("stub instance = "+stub);
+        System.out.println("stub instance = "+stub + " invoke add(1,2)");
+        stub.add(1,2);
         // Binder test end.
 
     }

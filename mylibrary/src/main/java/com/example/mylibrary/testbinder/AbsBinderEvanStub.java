@@ -1,6 +1,6 @@
 package com.example.mylibrary.testbinder;
 
-public abstract class AbsBinderEvanStub extends BinderEvan {
+public abstract class AbsBinderEvanStub extends BinderEvan implements TestInterface {
 
     public AbsBinderEvanStub()
     {
