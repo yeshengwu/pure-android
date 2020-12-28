@@ -3,8 +3,9 @@ package com.example.pureandroid;
 
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Intent;
+import android.content.Context;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private IMyAidlInterface mMediaServer;
+    private IBinder serviceBinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +33,9 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(MainActivity.this, TestAidlServer.class);
-                bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+//                Intent intent = new Intent(MainActivity.this, TestAidlServer.class);
+//                bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+                Log.e("evan","this = "+this);
             }
         });
 
@@ -45,7 +48,12 @@ public class MainActivity extends Activity {
                     if (mMediaServer != null) {
                         mMediaServer.basicTypes(1, 100L, false, 0.5f, 1d, "string");
 //                        int sum = mMediaServer.add(1,2);
+                       IBinder binder = mMediaServer.getBinder(serviceBinder);
 //                        Log.e(TAG,"sum 1 + 2 = "+sum);
+                        Log.e(TAG,"sum binder = "+binder);
+                        PackageInfo packageInfo = new PackageInfo();
+                        Log.e(TAG,"sum packageInfo = "+packageInfo.hashCode());
+                        mMediaServer.setPackageInfo(packageInfo);
                     }
                 } catch (RemoteException e) {
                     e.printStackTrace();
@@ -56,6 +64,11 @@ public class MainActivity extends Activity {
         TestB dd = new TestB() {
         };
         AppCompatActivity compatActivity = new AppCompatActivity();
+        Log.e("evan","context.classloader = "+Context.class.getClassLoader());
+        Log.e("evan","context.classloader parent = "+Context.class.getClassLoader().getParent());
+        Log.e("evan","getClassLoader = "+getClassLoader());
+        Log.e("evan","getClassLoader getParent = "+getClassLoader().getParent());
+
     }
 
     @Override
@@ -89,8 +102,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.e(TAG, "service connected.ComponentName = " + name + " service = " + service+ " service.hashCode = "+service.hashCode());
-
+            Log.e(TAG, "service connected.ComponentName = " + name + " service = " + service);
             mMediaServer = IMyAidlInterface.Stub.asInterface(service);
             Log.e(TAG, "service connected.mMediaServer = " + mMediaServer);
             IBinder aBinder = mMediaServer.asBinder();

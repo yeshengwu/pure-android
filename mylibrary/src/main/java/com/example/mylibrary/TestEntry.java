@@ -2,6 +2,7 @@ package com.example.mylibrary;
 
 import com.example.mylibrary.testbinder.AbsBinderEvanStub;
 import com.example.mylibrary.testconcurrcybook.Father;
+import com.example.mylibrary.testconcurrcybook.TestImpl;
 import com.example.mylibrary.testconcurrcybook.ThisEscape;
 
 import androidx.annotation.NonNull;
@@ -67,6 +68,50 @@ public class TestEntry {
         System.out.println("stub instance = "+stub + " invoke add(1,2)");
         stub.add(1,2);
         // Binder test end.
+
+
+//        TestThread testThread = new TestThread();
+//        testThread.start();
+
+//        try {
+//            Thread.sleep(5*1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        testThread.stop();
+
+//        CountDownLatch
+
+        final TestImpl test = new TestImpl();
+        Thread AA = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    test.doSomethingWait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        },"A");
+        AA.start();
+
+        try {
+            Thread.sleep(2*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+//        Thread BB = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                test.doSomNotify();
+//            }
+//        },"B");
+//        BB.start();
+
+        AA.interrupt();
+
 
     }
 }

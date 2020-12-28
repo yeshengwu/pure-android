@@ -2,6 +2,8 @@ package com.example.pureandroid;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -30,7 +32,7 @@ public class TestAidlServer extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.e(TAG,"onBind. intent = "+intent+ " return binder = "+mBinder+ " binder.hashCode = "+mBinder.hashCode());
+        Log.e(TAG,"onBind. intent = "+intent+ " return binder = "+mBinder+ " binder.hashCode = "+mBinder.hashCode() +" getClass = " +mBinder.getClass());
         return mBinder;
     }
 
@@ -58,6 +60,18 @@ public class TestAidlServer extends Service {
         public int basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
             Log.e(TAG,"basicTypes receive params : anInt = "+anInt+" aLong = "+aLong);
             return anInt;
+        }
+
+        @Override
+        public IBinder getBinder(IBinder binder) throws RemoteException {
+            Log.e(TAG,"basicTypes binder = "+binder);
+            return binder;
+        }
+
+        @Override
+        public void setPackageInfo(PackageInfo packageInfo) throws RemoteException {
+            // 收到的 packageInfo 跟客户端发来的不是同一个，跨进程传输 parcelble 序列化 后已经是新的对象。
+            Log.e(TAG,"basicTypes receive packageInfo  hash = "+packageInfo.hashCode());
         }
     };
 
