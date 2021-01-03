@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
@@ -68,7 +71,17 @@ public class MainActivity extends Activity {
         Log.e("evan","context.classloader parent = "+Context.class.getClassLoader().getParent());
         Log.e("evan","getClassLoader = "+getClassLoader());
         Log.e("evan","getClassLoader getParent = "+getClassLoader().getParent());
-
+//        Handler
+        Handler uiHandler = new Handler();
+        Message message = Message.obtain(uiHandler, new Runnable() {
+            @Override
+            public void run() {
+                Log.e("evan","IN message run");
+            }
+        });
+        uiHandler.sendMessage(message);
+//        Looper.myQueue();
+//        Looper.prepare();
     }
 
     @Override
