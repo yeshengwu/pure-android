@@ -12,7 +12,7 @@ public class TestBinarySearch {
 
         int[] a = {1, 2, 3, 4, 5, 6};
 //        int index = TestBinarySearch.commonBinarySearchEvan(a, 12);
-        int index = TestBinarySearch.recursionBinarySearchEvan(a,  12,0,a.length - 1);
+        int index = TestBinarySearch.recursionBinarySearchEvan(a,  6,0,a.length - 1);
 //        int index = TestBinarySearch.recursionBinarySearch(a, 4,0,a.length - 1);
         System.out.println("result index = " + index);
     }

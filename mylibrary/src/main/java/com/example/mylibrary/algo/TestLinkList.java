@@ -20,7 +20,7 @@ public class TestLinkList {
     }
 
 
-        public  ListNode ReverseList(ListNode head) {
+    public ListNode ReverseList(ListNode head) {
         // my wrong
 //            if(head == null ) {
 //                return head;
@@ -31,15 +31,15 @@ public class TestLinkList {
 //            head.next = null;
 //            return  ReverseList(head);
 
-            // right
-            if (head == null || head.next == null)
-                return head;
-            ListNode next = head.next;
-            head.next = null;
-            ListNode newHead = ReverseList(next);
-            next.next = head;
-            return newHead;
-        }
+        // right
+        if (head == null || head.next == null)
+            return head;
+        ListNode next = head.next;
+        head.next = null;
+        ListNode newHead = ReverseList(next);
+        next.next = head;
+        return newHead;
+    }
 
 
 //    public ListNode ReverseList(ListNode head) {
@@ -54,22 +54,22 @@ public class TestLinkList {
 //    }
 
 
-    public  ListNode findTheLastKNode(ListNode head,int k) {
+    public ListNode findTheLastKNode(ListNode head, int k) {
         if (head == null) return null;
         // 快慢指针
         ListNode slow = head;
         ListNode fast = head;
-        for (int i = 0;i<k;i++) {
+        for (int i = 0; i < k; i++) {
             fast = fast.next;
         }
-        while (fast != null){
+        while (fast != null) {
             fast = fast.next;
             slow = slow.next;
         }
         return slow;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         TestLinkList linkList = new TestLinkList();
         TestLinkList.ListNode node = new TestLinkList.ListNode(1);
@@ -79,17 +79,52 @@ public class TestLinkList {
         TestLinkList.ListNode node5 = new TestLinkList.ListNode(5);
         node.next = node2;
         node2.next = node3;
-        node3.next = node4;
-        node4.next = node5;
+//        node3.next = node4;
+//        node4.next = node5;
 
-        ListNode theLast4Node = linkList.findTheLastKNode(node,8);
-        System.out.println("theLast4Node = "+theLast4Node);
-        ListNode head = linkList.ReverseList(node);
-        System.out.println("ReverseList = "+head);
+//        ListNode theLast4Node = linkList.findTheLastKNode(node,5);
+//        System.out.println("theLast4Node = "+theLast4Node);
+        ListNode head = null;
+
+//        head = linkList.ReverseListEvan(node);
+//        head = linkList.ReverseListRecursiveEvan(node);
+//        System.out.println("ReverseList = " + head);
 
     }
 
+    public ListNode ReverseListEvan(ListNode head) {
+        // 虚拟头节点，头插法
+        ListNode dummyHead = new ListNode(-1);
 
+        //  head 头节点就断了
+        /*while (head != null) {
+            head.next = dummyHead.next;
+            dummyHead.next = head;
+
+            head = head.next; // 这样 head 头节点就断了，只剩 这次的 head.next值。下一次循环就直接退出了。
+        }
+        return dummyHead.next;*/
+
+        // 正解： 先保留 next 节点，不要断链。
+        while (head != null) {
+            ListNode next = head.next;
+
+            head.next = dummyHead.next;
+            dummyHead.next = head;
+
+            head = next;
+        }
+        return dummyHead.next;
+    }
+
+    public ListNode ReverseListRecursiveEvan(ListNode head) {
+        if (head.next == null) {
+            return head;
+        }
+        ListNode next = ReverseListRecursiveEvan(head.next);
+        next.next = head;
+        return next;
+    }
 
 
 }

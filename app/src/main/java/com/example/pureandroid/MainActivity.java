@@ -8,8 +8,8 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mylibrary.TestB;
+
+import java.util.concurrent.CountDownLatch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -82,6 +84,35 @@ public class MainActivity extends Activity {
         uiHandler.sendMessage(message);
 //        Looper.myQueue();
 //        Looper.prepare();
+
+        final HandlerThread handlerThread = new HandlerThread("name");
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    System.out.println("before wait");
+                    latch.await();
+                    System.out.println("after wait");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("isAlive = "+handlerThread.isAlive());
+            }
+        }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("start");
+                handlerThread.start();
+                System.out.println("countDowns");
+                latch.countDown();
+            }
+        }).start();
+
+
     }
 
     @Override
