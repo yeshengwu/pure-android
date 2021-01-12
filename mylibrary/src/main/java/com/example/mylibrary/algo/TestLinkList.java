@@ -87,8 +87,8 @@ public class TestLinkList {
         ListNode head = null;
 
 //        head = linkList.ReverseListEvan(node);
-//        head = linkList.ReverseListRecursiveEvan(node);
-//        System.out.println("ReverseList = " + head);
+        head = linkList.ReverseListRecursiveEvan(node);
+        System.out.println("ReverseList = " + head);
 
     }
 
@@ -118,12 +118,19 @@ public class TestLinkList {
     }
 
     public ListNode ReverseListRecursiveEvan(ListNode head) {
-        if (head.next == null) {
-            return head;
-        }
-        ListNode next = ReverseListRecursiveEvan(head.next);
-        next.next = head;
-        return next;
+//        if (head.next == null) {
+//            return head;
+//        }
+//        ListNode next = ReverseListRecursiveEvan(head.next);
+//        next.next = head;
+//        return next;
+
+        if (head == null || head.next == null) return head;
+        // 从下一个节点开始递归
+        ListNode reverse = ReverseListRecursiveEvan(head.next);
+        head.next.next = head; // 设置下一个节点的 next 为当前节点
+        head.next = null; // 把当前节点的 next 赋值为 null，避免循环引用
+        return reverse;
     }
 
 

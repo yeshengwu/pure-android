@@ -1,5 +1,12 @@
 package com.example.mylibrary.testconcurrcybook;
 
-public class TestBlockingQueue {
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 
+public class TestBlockingQueue {
+    public static void main(String[] args) {
+//        BlockingQueue
+//        PriorityBlockingQueue
+
+    }
 }

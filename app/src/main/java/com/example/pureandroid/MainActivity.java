@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.example.mylibrary.TestB;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +42,7 @@ public class MainActivity extends Activity {
 
 //                Intent intent = new Intent(MainActivity.this, TestAidlServer.class);
 //                bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
-                Log.e("evan","this = "+this);
+                Log.e("evan", "this = " + this);
             }
         });
 
@@ -53,11 +55,11 @@ public class MainActivity extends Activity {
                     if (mMediaServer != null) {
                         mMediaServer.basicTypes(1, 100L, false, 0.5f, 1d, "string");
 //                        int sum = mMediaServer.add(1,2);
-                       IBinder binder = mMediaServer.getBinder(serviceBinder);
+                        IBinder binder = mMediaServer.getBinder(serviceBinder);
 //                        Log.e(TAG,"sum 1 + 2 = "+sum);
-                        Log.e(TAG,"sum binder = "+binder);
+                        Log.e(TAG, "sum binder = " + binder);
                         PackageInfo packageInfo = new PackageInfo();
-                        Log.e(TAG,"sum packageInfo = "+packageInfo.hashCode());
+                        Log.e(TAG, "sum packageInfo = " + packageInfo.hashCode());
                         mMediaServer.setPackageInfo(packageInfo);
                     }
                 } catch (RemoteException e) {
@@ -69,16 +71,21 @@ public class MainActivity extends Activity {
         TestB dd = new TestB() {
         };
         AppCompatActivity compatActivity = new AppCompatActivity();
-        Log.e("evan","context.classloader = "+Context.class.getClassLoader());
-        Log.e("evan","context.classloader parent = "+Context.class.getClassLoader().getParent());
-        Log.e("evan","getClassLoader = "+getClassLoader());
-        Log.e("evan","getClassLoader getParent = "+getClassLoader().getParent());
+        Log.e("evan", "context.classloader = " + Context.class.getClassLoader());
+        Log.e("evan", "context.classloader parent = " + Context.class.getClassLoader().getParent());
+        Log.e("evan", "getClassLoader = " + getClassLoader());
+        Log.e("evan", "getClassLoader getParent = " + getClassLoader().getParent());
+
+        List<String> testAddNull = new ArrayList<>();
+        String a = null;
+        testAddNull.add(a);
+        Log.e("evan", "testAddNull "+testAddNull);
 //        Handler
         Handler uiHandler = new Handler();
         Message message = Message.obtain(uiHandler, new Runnable() {
             @Override
             public void run() {
-                Log.e("evan","IN message run");
+                Log.e("evan", "IN message run");
             }
         });
         uiHandler.sendMessage(message);
@@ -98,7 +105,6 @@ public class MainActivity extends Activity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("isAlive = "+handlerThread.isAlive());
             }
         }).start();
 
@@ -107,11 +113,31 @@ public class MainActivity extends Activity {
             public void run() {
                 System.out.println("start");
                 handlerThread.start();
-                System.out.println("countDowns");
+                System.out.println("countDown");
                 latch.countDown();
             }
         }).start();
 
+        final HandlerThread handlerThread2 = new HandlerThread("name");
+        final boolean[] test = {false};
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                test[0] = true;
+                handlerThread2.start();
+            }
+        }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (test[0] == false) {
+
+                }
+                boolean isAlive = handlerThread2.isAlive();
+                System.out.println("isAlive = " + isAlive);
+            }
+        }).start();
 
     }
 
@@ -160,7 +186,7 @@ public class MainActivity extends Activity {
                     public void binderDied() {
                         Log.e(TAG, "service connected. binderDied");
                     }
-                },0);
+                }, 0);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
