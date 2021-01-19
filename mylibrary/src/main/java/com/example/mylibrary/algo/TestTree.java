@@ -108,11 +108,18 @@ public class TestTree {
      * @param root
      */
     private void preOrder(TreeNode root) {
-        if (root != null) {
+        if (root == null) {
+            return;
+        }
+        System.out.print(root.val + " ");// 当前节点
+        preOrder(root.left);
+        preOrder(root.right);
+
+        /*if (root != null) {
             System.out.print(root.val + " ");// 当前节点
             preOrder(root.left);
             preOrder(root.right);
-        }
+        }*/
     }
 
     /**
@@ -158,7 +165,22 @@ public class TestTree {
          *     15  7
          */
 //        Integer[] nodeArray = [3,9,20,null,null,15,7];
-        Integer[] nodeArray = {3, 9, 20, null, null, 15, 7};
+//        Integer[] nodeArray = {3, 9, 20, null, null, 15, 7};
+
+        /**
+         *       3
+         *    /    \
+         *   9       8
+         *  / \     /  \
+         *  1  13   7  12
+         *  \  /\      /
+         *  2 4  5    15
+         *             \
+         *             18
+         */
+        Integer[] nodeArray = {3, 9, 8, 1, 13, 7, 12,null,2,4,5,null,null,15,null
+                  ,null,null,null,null,null,null ,null,18}; // 18 前面 7个 null 是 2 4 5 15 下面的，像 2
+        // 这个节点的兄弟下面不需要填充 null， 因为 2的兄弟都不在填个jj
         TreeNode root = TestTree.generateTreeNode(nodeArray);
         System.out.println("root = " + root);
 
