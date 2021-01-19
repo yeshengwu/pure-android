@@ -33,16 +33,16 @@ public class TestEntry {
         int x = 1;
         int b = 2;
         x = b;
-        System.out.println("x1 = "+x);
+        System.out.println("x1 = " + x);
         b = 3;
-        System.out.println("x2 = "+x);
+        System.out.println("x2 = " + x);
 
         String sa = "sa";
         String sb = "sb";
         sa = sb;
-        System.out.println("sa1 = "+sa);
+        System.out.println("sa1 = " + sa);
         sb = "sb2";
-        System.out.println("sa2 = "+sa);
+        System.out.println("sa2 = " + sa);
 
         /**
          * 测试 AIDL 生成类中，抽象类实例化时 抽象类构造器和父类构造器是否被调用。
@@ -56,7 +56,7 @@ public class TestEntry {
 
             @Override
             public void add(int a, int b) {
-                System.out.println("stub instance IN add:  a = " +a + " b = " +b);
+                System.out.println("stub instance IN add:  a = " + a + " b = " + b);
             }
 
             @NonNull
@@ -65,8 +65,8 @@ public class TestEntry {
                 return "stub toString";
             }
         };
-        System.out.println("stub instance = "+stub + " invoke add(1,2)");
-        stub.add(1,2);
+        System.out.println("stub instance = " + stub + " invoke add(1,2)");
+        stub.add(1, 2);
         // Binder test end.
 
 
@@ -93,11 +93,11 @@ public class TestEntry {
                     e.printStackTrace();
                 }
             }
-        },"A");
+        }, "A");
         AA.start();
 
         try {
-            Thread.sleep(2*1000);
+            Thread.sleep(2 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -112,6 +112,8 @@ public class TestEntry {
 
         AA.interrupt();
 
+        TestEntry entry = new TestEntry();
 
     }
+
 }

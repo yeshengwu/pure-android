@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
@@ -138,6 +139,16 @@ public class MainActivity extends Activity {
                 System.out.println("isAlive = " + isAlive);
             }
         }).start();
+
+        /*new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("test before AssertionError");
+                throw new AssertionError("evan AssertionError");
+//                throw new Error("evan Exception");
+            }
+        },"thread-throw-error").start();*/
+
 
     }
 
