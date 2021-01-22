@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Lifecycle;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
         List<String> testAddNull = new ArrayList<>();
         String a = null;
         testAddNull.add(a);
-        Log.e("evan", "testAddNull "+testAddNull);
+        Log.e("evan", "testAddNull " + testAddNull);
 //        Handler
         Handler uiHandler = new Handler();
         Message message = Message.obtain(uiHandler, new Runnable() {
@@ -149,6 +149,49 @@ public class MainActivity extends Activity {
             }
         },"thread-throw-error").start();*/
 
+        // LRU Cache 结论：java 链表 lru 。
+        // 实现链表维护的LRU， 头部插入来维持LRU。 https://blog.csdn.net/weixin_43087333/article/details/105582535
+        //插入数据：
+        // 判断要插入的数据是否存在，如果存在，删除存在的元素，将该元素插入进头部
+        //如果不存在，判断是否超出容量，如果超出容量，删除最后一个元素，将该元素插入头部
+        // 获取数据：
+        // 链表遍历查找，如果存在，删除存在的元素，将该元素插入进头部
+        // 如果不存在返回空
+
+        LruCache<String, String> lruCache = new LruCache<String, String>(2) {
+            @Override
+            protected void entryRemoved(boolean evicted, String key, String oldValue, String newValue) {
+                System.out.println("entryRemoved. evicted = " + evicted + " key = " + key + " oldValue = " + oldValue + " newValue = " + newValue);
+            }
+
+//            @Override
+//            protected String create(String key) {
+//                System.out.println("create. key = " + key);
+//                return ""+new Random().nextInt();
+//            }
+
+            @Override
+            protected int sizeOf(String key, String value) {
+                System.out.println("sizeOf. key = " + key + " value = " + value);
+                return 1;
+            }
+        };
+
+        String putA = lruCache.put("a", "a");
+        System.out.println(" putA = " + putA);
+        System.out.println(" putA.S = " + lruCache.snapshot());
+        String putB = lruCache.put("b", "b");
+        System.out.println("putB = " + putB);
+        System.out.println(" putB.S = " + lruCache.snapshot());
+        String putC = lruCache.put("c", "c");
+        System.out.println("putC = " + putC);
+        System.out.println(" putC.S = " + lruCache.snapshot());
+        String getA = lruCache.get("a");
+        String getX = lruCache.get("x");
+        String getC = lruCache.get("c");
+        System.out.println(" getA = " + getA + " getX = " + getX + " getC = " + getC);
+        System.out.println(" get after.S = " + lruCache.snapshot());
+        System.out.println(" get after.S2 = " + lruCache.snapshot());
 
     }
 

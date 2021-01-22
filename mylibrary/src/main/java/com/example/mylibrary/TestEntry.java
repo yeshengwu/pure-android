@@ -1,9 +1,13 @@
 package com.example.mylibrary;
 
+import android.util.LruCache;
+
 import com.example.mylibrary.testbinder.AbsBinderEvanStub;
 import com.example.mylibrary.testconcurrcybook.Father;
 import com.example.mylibrary.testconcurrcybook.TestImpl;
 import com.example.mylibrary.testconcurrcybook.ThisEscape;
+
+import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 
@@ -114,6 +118,48 @@ public class TestEntry {
 
         TestEntry entry = new TestEntry();
 
+        int tableSizeFor5 = tableSizeFor(5);
+        int tableSizeFor6 = tableSizeFor(6);
+        int tableSizeFor8 = tableSizeFor(8);
+        int tableSizeFor9 = tableSizeFor(9);
+        System.out.println("tableSizeFor5 = " + tableSizeFor5 + " 6 = " + tableSizeFor6 + " 8 = " + tableSizeFor8 + " 9 = " + tableSizeFor9);
+        // 结论：找到 initialCapacity 返回大于输入参数且最近的2的整数次幂的数，日志如下：
+        // tableSizeFor5 = 8 6 = 8 8 = 8 9 = 16
+        // HashMap 中， this.threshold = tableSizeFor(initialCapacity);
+
+        HashMap<String, String> testHashMap = new HashMap<>();
+        String putReturnA = testHashMap.put("a", "axx");
+        System.out.println("putReturnA = " + putReturnA);
+        String putReturnB = testHashMap.put("b", "bxx");
+        System.out.println("putReturnB = " + putReturnB);
+        String putReturnA2 = testHashMap.put("a", "axx2");
+        System.out.println("putReturnA2 = " + putReturnA2);
+        // 结论： put 返回值是 这个 key 之前映射的值，日志如下：
+        //putReturnA = null
+        //putReturnB = null
+        //putReturnA2 = axx
+
+
+    }
+
+    /**
+     * The maximum capacity, used if a higher value is implicitly specified
+     * by either of the constructors with arguments.
+     * MUST be a power of two <= 1<<30.
+     */
+    static final int MAXIMUM_CAPACITY = 1 << 30;
+
+    /**
+     * Returns a power of two size for the given target capacity.
+     */
+    static final int tableSizeFor(int cap) {
+        int n = cap - 1;
+        n |= n >>> 1;
+        n |= n >>> 2;
+        n |= n >>> 4;
+        n |= n >>> 8;
+        n |= n >>> 16;
+        return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
 
 }
