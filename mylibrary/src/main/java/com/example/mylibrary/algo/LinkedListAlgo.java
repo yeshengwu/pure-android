@@ -4,13 +4,14 @@ package com.example.mylibrary.algo;
  * Created by shidu on 19/4/5.
  * https://github.com/wangzheng0822/algo/blob/master/java/07_linkedlist/LinkedListAlgo.java
  */
+
 /**
  * 1) 单链表反转
  * 2) 链表中环的检测
  * 3) 两个有序的链表合并
  * 4) 删除链表倒数第n个结点
  * 5) 求链表的中间结点
- *
+ * <p>
  * Author: Zheng
  */
 public class LinkedListAlgo {
@@ -122,7 +123,7 @@ public class LinkedListAlgo {
     }
 
     public static Node Merge(Node list1, Node list2) {
-        Node head = new Node(-1,null);
+        Node head = new Node(-1, null);
         Node cur = head;
         while (list1 != null && list2 != null) {
             if (list1.data <= list2.data) {
@@ -211,7 +212,7 @@ public class LinkedListAlgo {
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         LinkedListAlgo testInsert = new LinkedListAlgo();
 //        Node head =  LinkedListAlgo.createNode(-1);
 
@@ -219,34 +220,99 @@ public class LinkedListAlgo {
         Node node2 = LinkedListAlgo.createNode(2);
         Node node3 = LinkedListAlgo.createNode(3);
         Node node4 = LinkedListAlgo.createNode(4);
-
-//        head.next = node1;
-        node1.next = node2;
-        node2.next = node3;
-        node3.next = node4;
-
-        LinkedListAlgo.printAll(node1);
-
         Node node5 = LinkedListAlgo.createNode(5);
         Node node6 = LinkedListAlgo.createNode(6);
         Node node7 = LinkedListAlgo.createNode(7);
-        node5.next = node6;
-        node6.next = node7;
-        LinkedListAlgo.printAll(node5);
 
-//        Node merged = LinkedListAlgo.mergeSortedLists(node1,node5);
-//        Node merged = LinkedListAlgo.Merge(node1,node5);
-//        LinkedListAlgo.printAll(merged);
+//        head.next = node1;
+        node1.next = node3;
+        node3.next = node5;
+
+        LinkedListAlgo.printAll(node1);
+
+
+        node2.next = node4;
+        node4.next = node6;
+        node6.next = node7;
+        LinkedListAlgo.printAll(node2);
+
+        /**
+         * 结论：nodeXX 持有 node1 引用后，修改 nodeXX 会导致 node1 一样被更改。log:
+         *
+         * nodeXX start:
+         * 1 3 5
+         * nodeXX set next:
+         * 1 2 4 6 7
+         * nodeXX after node1:
+         * 1 2 4 6 7
+         */
+        /*Node nodeXX = node1;
+        System.out.println("nodeXX start:");
+        LinkedListAlgo.printAll(nodeXX);
+        nodeXX.next = node2;
+        System.out.println("nodeXX set next:");
+        LinkedListAlgo.printAll(nodeXX);
+        System.out.println("nodeXX after. node1:");
+        LinkedListAlgo.printAll(node1);*/
+
+//        Node merged = LinkedListAlgo.mergeSortedLists(node1,node2);
+//        Node merged = LinkedListAlgo.Merge(node1,node2);
+        Node merged = LinkedListAlgo.MergeEvan(node1, node2);
+        LinkedListAlgo.printAll(merged);
 
 //        Node middleNode = LinkedListAlgo.findMiddleNode(node1);
 //        System.out.println("middleNode from:");
 //        LinkedListAlgo.printAll(middleNode);
 
-        Node reverseHead = LinkedListAlgo.reverse(node1);
 //        Node reverseHead = LinkedListAlgo.reverse(node1);
-//        Node reverseHead = LinkedListAlgo.ReverseList(node1);
+//        Node reverseHead = LinkedListAlgo.reverse(node1);
+        Node reverseHead = LinkedListAlgo.ReverseList(node1);
         LinkedListAlgo.printAll(reverseHead);
 
+    }
+
+    /**
+     * https://www.youtube.com/watch?v=yuMEpwt-YB4
+     * @param list1
+     * @param list2
+     * @return
+     */
+    public static Node MergeEvan(Node list1, Node list2) {
+
+        if (list1 == null) return null;
+        if (list2 == null) return null;
+
+        Node head3 = null;
+        if (list1.data < list2.data) {
+            head3 = list1;
+            list1 = list1.next;
+        } else {
+            head3 = list2;
+            list2 = list2.next;
+        }
+
+        Node cur = head3;
+        System.out.println(cur);
+        System.out.println(head3);
+        while (list1 != null && list2 != null) {
+            if (list1.data < list2.data) {
+                cur.next = list1;
+                list1 = list1.next;
+            } else {
+                cur.next = list2;
+                list2 = list2.next;
+            }
+
+            cur = cur.next;
+        }
+
+        if (list1 == null) {
+            cur.next = list2;
+        } else {
+            cur.next = list1;
+        }
+
+        return head3;
     }
 
 }
