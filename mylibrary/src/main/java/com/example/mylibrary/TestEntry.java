@@ -1,7 +1,5 @@
 package com.example.mylibrary;
 
-import android.util.LruCache;
-
 import com.example.mylibrary.testbinder.AbsBinderEvanStub;
 import com.example.mylibrary.testconcurrcybook.Father;
 import com.example.mylibrary.testconcurrcybook.TestImpl;
@@ -139,7 +137,47 @@ public class TestEntry {
         //putReturnB = null
         //putReturnA2 = axx
 
+        /**
+         * 结论： k-- --k区别： k-- 先拿值，再-1.while 会走
+         *  --k， -1后 while 不走了。
+         */
+        int k = 1;
+        System.out.println("k init =  " + k);
+        while (k-- > 0) {
+            System.out.println("k--. IN while k = " + k);
+        }
+        int i = 1;
+        System.out.println("i init =  " + i);
+        while (--i > 0) {
+            System.out.println("--i. IN while i = " + i);
+        }
 
+
+        TestEntry.testWitchCallback(new Callback() {
+            @Override
+            public void onDataBack() {
+                System.out.println("testWitchCallback onDataBack");
+            }
+        });
+        System.out.println("testWitchCallback nextLine");
+    }
+
+    interface Callback {
+        void onDataBack();
+    }
+
+    private static void testWitchCallback(final Callback callback) {
+        if (callback != null) {
+            callback.onDataBack();
+        }
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (callback != null) {
+//                    callback.onDataBack();
+//                }
+//            }
+//        }).start();
     }
 
     /**

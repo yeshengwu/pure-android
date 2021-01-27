@@ -230,7 +230,6 @@ public class LinkedListAlgo {
 
         LinkedListAlgo.printAll(node1);
 
-
         node2.next = node4;
         node4.next = node6;
         node6.next = node7;
@@ -256,8 +255,7 @@ public class LinkedListAlgo {
         LinkedListAlgo.printAll(node1);*/
 
 //        Node merged = LinkedListAlgo.mergeSortedLists(node1,node2);
-//        Node merged = LinkedListAlgo.Merge(node1,node2);
-        Node merged = LinkedListAlgo.MergeEvan(node1, node2);
+        Node merged = LinkedListAlgo.Merge(node1,node2);
         LinkedListAlgo.printAll(merged);
 
 //        Node middleNode = LinkedListAlgo.findMiddleNode(node1);

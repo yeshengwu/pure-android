@@ -117,6 +117,20 @@ public class TestLinkList {
         return dummyHead.next;
     }
 
+    /**
+     *  1->2->3
+     *   递归示意图：
+     *      h                   h             h
+     *   |-----|            |-----|        |-----|
+     *   |  1   | -------> |  2   | -------> |  3   |
+     *   |  .(回归点)  | <------- |  .(回归点)  | <-------  | return reverse = 3  |
+     *   |  后续逻辑  |    |  后续逻辑  |
+     *
+     *   后续逻辑 是当前 h 入参 下一个节点往回指 head.next.next = head;  head.next = null;
+     *
+     * @param head
+     * @return
+     */
     public ListNode ReverseListRecursiveEvan(ListNode head) {
 //        if (head.next == null) {
 //            return head;

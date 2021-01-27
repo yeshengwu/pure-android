@@ -1,5 +1,6 @@
 package com.example.mylibrary.algo;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -104,7 +105,8 @@ public class TestTree {
     /**
      * 前序遍历：根结点 ---> 左子树 ---> 右子树
      * 根 左 右
-     *  https://www.cnblogs.com/bigsai/p/11393609.html 二叉树前序遍历
+     * https://www.cnblogs.com/bigsai/p/11393609.html 二叉树前序遍历
+     *
      * @param root
      */
     private void preOrder(TreeNode root) {
@@ -178,8 +180,8 @@ public class TestTree {
          *             \
          *             18
          */
-        Integer[] nodeArray = {3, 9, 8, 1, 13, 7, 12,null,2,4,5,null,null,15,null
-                  ,null,null,null,null,null,null ,null,18}; // 18 前面 7个 null 是 2 4 5 15 下面的，像 2
+        Integer[] nodeArray = {3, 9, 8, 1, 13, 7, 12, null, 2, 4, 5, null, null, 15, null
+                , null, null, null, null, null, null, null, 18}; // 18 前面 7个 null 是 2 4 5 15 下面的，像 2
         // 这个节点的兄弟下面不需要填充 null， 因为 2的兄弟都不在填个jj
         TreeNode root = TestTree.generateTreeNode(nodeArray);
         System.out.println("root = " + root);
@@ -207,6 +209,34 @@ public class TestTree {
         System.out.println("postOrder:");
         testTree.postOrder(root);
 
+        System.out.println("");
+        System.out.println("PrintFromTopToBottom:");
+        System.out.println(PrintFromTopToBottom(root));
+
+    }
+
+    /**
+     * http://www.cyc2018.xyz/%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87%20Offer%20%E9%A2%98%E8%A7%A3/32.1%20%E4%BB%8E%E4%B8%8A%E5%BE%80%E4%B8%8B%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91.html#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0
+     * 32.1 从上往下打印二叉树
+     * @param root
+     * @return
+     */
+    public static ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        ArrayList<Integer> ret = new ArrayList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int cnt = queue.size();
+            while (cnt-- > 0) {
+                TreeNode t = queue.poll();
+                if (t == null)
+                    continue;
+                ret.add(t.val);
+                queue.add(t.left);
+                queue.add(t.right);
+            }
+        }
+        return ret;
     }
 
 }
