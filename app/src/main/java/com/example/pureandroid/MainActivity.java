@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.mylibrary.TestB;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -193,7 +195,24 @@ public class MainActivity extends Activity {
         System.out.println(" get after.S = " + lruCache.snapshot());
         System.out.println(" get after.S2 = " + lruCache.snapshot());
 
+        // /data/user/0/com.example.pureandroid
+        System.out.println(" dataDir = " + getApplicationInfo().dataDir);
 
+        // 结论： app 没有权限操作  /data/dalvik-cache 
+        String fileName = "/data/dalvik-cache/test.txt";
+        try {
+            //使用这个构造函数时，如果存在kuka.txt文件，
+            //则先把这个文件给删除掉，然后创建新的kuka.txt
+            FileWriter writer = new FileWriter(fileName);
+            writer.write("Hello Kuka:\n");
+            writer.write("  My name is coolszy!\n");
+            writer.write("  I like you and miss you。");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        File file = new File("/data/dalvik-cache");
+//        System.out.println(" file = " + file.canRead());
     }
 
     @Override

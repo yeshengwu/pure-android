@@ -2,7 +2,7 @@ package com.example.mylibrary;
 
 import com.example.mylibrary.testbinder.AbsBinderEvanStub;
 import com.example.mylibrary.testconcurrcybook.Father;
-import com.example.mylibrary.testconcurrcybook.TestImpl;
+import com.example.mylibrary.testconcurrcybook.NormalClass;
 import com.example.mylibrary.testconcurrcybook.ThisEscape;
 
 import java.util.HashMap;
@@ -85,7 +85,7 @@ public class TestEntry {
 
 //        CountDownLatch
 
-        final TestImpl test = new TestImpl();
+        final NormalClass test = new NormalClass();
         Thread AA = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -160,6 +160,19 @@ public class TestEntry {
             }
         });
         System.out.println("testWitchCallback nextLine");
+
+        if (entry.getXX() instanceof String) {
+            String xxx = (String) entry.getXX();
+            System.out.println("xxx = "+xxx);
+        } else {
+            System.out.println(" else xxx ");
+        }
+
+
+    }
+
+    private Object getXX() {
+        return new Father();
     }
 
     interface Callback {

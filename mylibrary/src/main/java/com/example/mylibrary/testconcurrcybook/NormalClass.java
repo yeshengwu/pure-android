@@ -1,6 +1,6 @@
 package com.example.mylibrary.testconcurrcybook;
 
-public class TestImpl {
+public class NormalClass {
     private final Object lock = new Object();
 
     public void doSomethingWait() throws InterruptedException {

@@ -212,12 +212,14 @@ public class TestTree {
         System.out.println("");
         System.out.println("PrintFromTopToBottom:");
         System.out.println(PrintFromTopToBottom(root));
+        System.out.println(PrintFromTopToBottom2(root));
 
     }
 
     /**
      * http://www.cyc2018.xyz/%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87%20Offer%20%E9%A2%98%E8%A7%A3/32.1%20%E4%BB%8E%E4%B8%8A%E5%BE%80%E4%B8%8B%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91.html#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0
      * 32.1 从上往下打印二叉树
+     *
      * @param root
      * @return
      */
@@ -239,4 +241,23 @@ public class TestTree {
         return ret;
     }
 
+    public static ArrayList<Integer> PrintFromTopToBottom2(TreeNode root) {
+        ArrayList<Integer> result = new ArrayList<>();
+        LinkedList<TreeNode> queue = new LinkedList<>();
+
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int count = queue.size();
+            for (int i = 0; i < count; i++) {
+                TreeNode node = queue.poll();
+                if (node == null) {
+                    continue;
+                }
+                result.add(node.val);
+                queue.add(node.left);
+                queue.add(node.right);
+            }
+        }
+        return result;
+    }
 }
