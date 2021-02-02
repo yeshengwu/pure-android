@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
@@ -213,6 +214,9 @@ public class MainActivity extends Activity {
         }
 //        File file = new File("/data/dalvik-cache");
 //        System.out.println(" file = " + file.canRead());
+
+        System.out.println(" Looper.myLooper() = " + Looper.myLooper());
+        System.out.println(" Thread.currentThread() = " + Thread.currentThread());
     }
 
     @Override
