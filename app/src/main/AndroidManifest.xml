@@ -17,13 +17,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".TestLayoutAc"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HookCloseGuardActivity"
+            android:screenOrientation="portrait" />
+
         <!-- android:process=":service"  -->
         <service
             android:name=".TestAidlServer"
             android:enabled="true"
-            android:process=":service"
-            >
-        </service>
+            android:process=":service"></service>
     </application>
 
 </manifest>

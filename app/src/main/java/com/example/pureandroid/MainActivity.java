@@ -4,16 +4,20 @@ package com.example.pureandroid;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
+import android.os.StatFs;
 import android.util.Log;
 import android.util.LruCache;
+import android.util.Printer;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +49,11 @@ public class MainActivity extends Activity {
 
 //                Intent intent = new Intent(MainActivity.this, TestAidlServer.class);
 //                bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+
+//                Intent intent = new Intent(MainActivity.this, TestLayoutAc.class);
+//                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, HookCloseGuardActivity.class);
+                startActivity(intent);
                 Log.e("evan", "this = " + this);
             }
         });
@@ -84,6 +93,14 @@ public class MainActivity extends Activity {
         testAddNull.add(a);
         Log.e("evan", "testAddNull " + testAddNull);
 //        Handler
+
+//        Looper.myLooper().setMessageLogging(new Printer() {
+//            @Override
+//            public void println(String x) {
+//                Log.e("evan", "IN myLooper println(x) x = " + x);
+//            }
+//        });
+
         Handler uiHandler = new Handler();
         Message message = Message.obtain(uiHandler, new Runnable() {
             @Override
@@ -213,6 +230,12 @@ public class MainActivity extends Activity {
         }
 //        File file = new File("/data/dalvik-cache");
 //        System.out.println(" file = " + file.canRead());
+
+//        RecyclerView
+        System.out.println(" dataDir = " + getApplicationInfo().dataDir);
+       int mStatFrsize = new StatFs("/data").getBlockSize();
+        System.out.println(" mStat.f_frsize = " + mStatFrsize);
+
     }
 
     @Override

@@ -137,6 +137,11 @@ public class TestEntry {
         //putReturnB = null
         //putReturnA2 = axx
 
+        testHashMap.put(null,"value of null key");
+        System.out.println("testHashMap = " + testHashMap);
+        String valueOfNullKey = testHashMap.get(null);
+        System.out.println("valueOfNullKey = " + valueOfNullKey);
+
         /**
          * 结论： k-- --k区别： k-- 先拿值，再-1.while 会走
          *  --k， -1后 while 不走了。
