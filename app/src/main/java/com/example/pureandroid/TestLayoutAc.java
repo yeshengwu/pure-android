@@ -18,6 +18,8 @@ public class TestLayoutAc extends Activity {
 
         setContentView(R.layout.activity_test_layout);
 
+
+
         // 问题：每个 view 的 getLayoutParams 返回是什么
         LinearLayout rootContainer = findViewById(R.id.root_container);
         TextView textViewInRootContainer = findViewById(R.id.test_textview);
@@ -26,10 +28,10 @@ public class TestLayoutAc extends Activity {
 
         ViewParent rootGetParent = rootContainer.getParent();
         textViewInRvContainer.requestLayout();
-        Log.e("evan","rootContainer.getParent() = "+rootGetParent);
-        Log.e("evan","rootContainer.getLayoutParams() = "+rootContainer.getLayoutParams());
-        Log.e("evan","textViewInRootContainer.getLayoutParams() = "+textViewInRootContainer.getLayoutParams());
-        Log.e("evan","textRvContainerInRootContainer.getLayoutParams() = "+textRvContainerInRootContainer.getLayoutParams());
-        Log.e("evan","textViewInRvContainer.getLayoutParams() = "+textViewInRvContainer.getLayoutParams());
+        Log.e("evan", "rootContainer.getParent() = " + rootGetParent);
+        Log.e("evan", "rootContainer.getLayoutParams() = " + rootContainer.getLayoutParams());
+        Log.e("evan", "textViewInRootContainer.getLayoutParams() = " + textViewInRootContainer.getLayoutParams());
+        Log.e("evan", "textRvContainerInRootContainer.getLayoutParams() = " + textRvContainerInRootContainer.getLayoutParams());
+        Log.e("evan", "textViewInRvContainer.getLayoutParams() = " + textViewInRvContainer.getLayoutParams());
     }
 }

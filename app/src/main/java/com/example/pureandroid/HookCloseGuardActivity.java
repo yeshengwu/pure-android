@@ -7,6 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -22,6 +26,8 @@ public class HookCloseGuardActivity extends Activity {
     private static final String TAG = "HookCloseGuardActivity";
     private volatile static Object sOriginalReporter;
 
+    FileInputStream a;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +36,12 @@ public class HookCloseGuardActivity extends Activity {
     }
 
     private void testAllocate() {
-        CursorWindow cursorWindow = new CursorWindow("test");
+//        CursorWindow cursorWindow = new CursorWindow("test");
+        try {
+           a = new FileInputStream("/sdcard/block1868");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void allocate(View view) {

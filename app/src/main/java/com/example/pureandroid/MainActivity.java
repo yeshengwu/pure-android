@@ -2,6 +2,8 @@ package com.example.pureandroid;
 
 
 import android.app.Activity;
+import android.app.AppComponentFactory;
+import android.app.Instrumentation;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -52,7 +54,10 @@ public class MainActivity extends Activity {
 
 //                Intent intent = new Intent(MainActivity.this, TestLayoutAc.class);
 //                startActivity(intent);
-                Intent intent = new Intent(MainActivity.this, HookCloseGuardActivity.class);
+//                Intent intent = new Intent(MainActivity.this, HookCloseGuardActivity.class);
+//                startActivity(intent);
+
+                Intent intent = new Intent(MainActivity.this, TestActivityWithConstructor.class);
                 startActivity(intent);
                 Log.e("evan", "this = " + this);
             }
@@ -236,6 +241,12 @@ public class MainActivity extends Activity {
        int mStatFrsize = new StatFs("/data").getBlockSize();
         System.out.println(" mStat.f_frsize = " + mStatFrsize);
 
+        // 测试 log 不同 tag 在 logcat 中显示问题
+        Log.e("evan", "tag is evan");
+        Log.e("mark", "tag is mark");
+        Log.e("evan", "downloadModule:tag is new format");
+
+//        AppComponentFactory
     }
 
     @Override
