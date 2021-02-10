@@ -1,6 +1,8 @@
 package com.example.mylibrary;
 
-public class TempClass {
+import java.io.Serializable;
+
+public class TempClass  {
     private void setData() {
         System.out.println("IN TempClass. setData");
     }

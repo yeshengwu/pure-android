@@ -2,8 +2,6 @@ package com.example.pureandroid;
 
 
 import android.app.Activity;
-import android.app.AppComponentFactory;
-import android.app.Instrumentation;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,13 +11,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.StatFs;
 import android.util.Log;
 import android.util.LruCache;
-import android.util.Printer;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +25,7 @@ import com.example.mylibrary.TestB;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -49,16 +46,16 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
 
-//                Intent intent = new Intent(MainActivity.this, TestAidlServer.class);
-//                bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+                Intent intent = new Intent(MainActivity.this, TestAidlServer.class);
+                bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
 
 //                Intent intent = new Intent(MainActivity.this, TestLayoutAc.class);
 //                startActivity(intent);
 //                Intent intent = new Intent(MainActivity.this, HookCloseGuardActivity.class);
 //                startActivity(intent);
 
-                Intent intent = new Intent(MainActivity.this, TestActivityWithConstructor.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, TestActivityWithConstructor.class);
+//                startActivity(intent);
                 Log.e("evan", "this = " + this);
             }
         });
@@ -211,11 +208,22 @@ public class MainActivity extends Activity {
         System.out.println("putC = " + putC);
         System.out.println(" putC.S = " + lruCache.snapshot());
         String getA = lruCache.get("a");
-        String getX = lruCache.get("x");
+        System.out.println(" getA = " + getA);
+
         String getC = lruCache.get("c");
-        System.out.println(" getA = " + getA + " getX = " + getX + " getC = " + getC);
+        System.out.println(" getC = " + getC);
         System.out.println(" get after.S = " + lruCache.snapshot());
-        System.out.println(" get after.S2 = " + lruCache.snapshot());
+
+        // LinkedHashMap lru
+        LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>(16, 0.75f, true);
+        linkedHashMap.put("1", "a");
+        linkedHashMap.put("2", "b");
+        linkedHashMap.put("3", "c");
+        System.out.println("put all after map  = " + linkedHashMap); //  {1=a, 2=b, 3=c}
+        String get1 = linkedHashMap.get("1");
+        System.out.println("get1 = " + get1);
+        // 当 accessOrder的值为true， 1节点跑到链表末尾了。
+        System.out.println("get after map  = " + linkedHashMap); // {2=b, 3=c, 1=a}
 
         // /data/user/0/com.example.pureandroid
         System.out.println(" dataDir = " + getApplicationInfo().dataDir);
@@ -238,7 +246,7 @@ public class MainActivity extends Activity {
 
 //        RecyclerView
         System.out.println(" dataDir = " + getApplicationInfo().dataDir);
-       int mStatFrsize = new StatFs("/data").getBlockSize();
+        int mStatFrsize = new StatFs("/data").getBlockSize();
         System.out.println(" mStat.f_frsize = " + mStatFrsize);
 
         // 测试 log 不同 tag 在 logcat 中显示问题
@@ -285,6 +293,18 @@ public class MainActivity extends Activity {
             Log.e(TAG, "service connected.mMediaServer = " + mMediaServer);
             IBinder aBinder = mMediaServer.asBinder();
             Log.e(TAG, "service connected.aBinder = " + aBinder);
+            // 跨进程日志:
+            // service connected.ComponentName = ComponentInfo{com.example.pureandroid/com.example.pureandroid.TestAidlServer}
+            // service = android.os.BinderProxy@627fea6
+            // service connected.mMediaServer = com.example.pureandroid.IMyAidlInterface$Stub$Proxy@90230e7
+
+            // 同进程日志：
+            // service connected.ComponentName = ComponentInfo{com.example.pureandroid/com.example.pureandroid.TestAidlServer}
+            // service = com.example.pureandroid.TestAidlServer$1@90230e7
+            // service connected.mMediaServer = com.example.pureandroid.TestAidlServer$1@90230e7
+            // TestAidlServer 那边返回相同：90230e7
+            // E/TestAidlServer: onBind. intent = Intent { cmp=com.example.pureandroid/.TestAidlServer }
+            // return binder = com.example.pureandroid.TestAidlServer$1@90230e7
 
 //            service.pingBinder()
 //            service.isBinderAlive();

@@ -2,7 +2,10 @@ package com.example.mylibrary.algo;
 
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 public class TestTree {
@@ -124,6 +127,21 @@ public class TestTree {
         }*/
     }
 
+    private void preOrderXX(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        System.out.print(root.val + " ");// 当前节点
+        preOrderXX(root.right);
+        preOrderXX(root.left);
+
+        /*if (root != null) {
+            System.out.print(root.val + " ");// 当前节点
+            preOrder(root.left);
+            preOrder(root.right);
+        }*/
+    }
+
     /**
      * 中序遍历：
      * 左 根 右
@@ -212,8 +230,15 @@ public class TestTree {
         System.out.println("");
         System.out.println("PrintFromTopToBottom:");
         System.out.println(PrintFromTopToBottom(root));
-        System.out.println(PrintFromTopToBottom2(root));
-
+//        System.out.println(PrintFromTopToBottom2(root));
+        System.out.println("");
+        System.out.println("getRightView:");
+        System.out.println(getRightSideView(root));
+        System.out.println("");
+        System.out.println("rightSideView:");
+        System.out.println(rightSideView(root));
+        System.out.println("rightSideViewDFS:");
+        System.out.println(testTree.rightSideViewDFS(root));
     }
 
     /**
@@ -260,4 +285,107 @@ public class TestTree {
         }
         return result;
     }
+
+    /**
+     * 头 增长
+     * 层序遍历，BFS
+     * 关键注意点：每层遍历不空的节点才放入，然后 遍历时将 当前层的最后一个节点放入结果列表。
+     * https://leetcode-cn.com/problems/binary-tree-right-side-view/comments/
+     *
+     * @param node
+     * @return
+     */
+    public static List<Integer> getRightSideView(TreeNode node) {
+        List<Integer> result = new ArrayList<>();
+        if (node == null) {
+            return new ArrayList<>();
+        }
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            int count = queue.size();
+            for (int i = 0; i < count; i++) {
+                TreeNode item = queue.poll();
+
+                if (item == null) {
+                    continue;
+                }
+
+                if (item.left != null) {
+                    queue.offer(item.left);
+                }
+                if (item.right != null) {
+                    queue.offer(item.right);
+                }
+                if (i == count - 1) {  //将当前层的最后一个节点放入结果列表
+                    result.add(item.val);
+                }
+            }
+        }
+        return result;
+    }
+
+    public static List<Integer> rightSideView(TreeNode root) {
+        Map<Integer, Integer> rightmostValueAtDepth = new HashMap<Integer, Integer>();
+        int max_depth = -1;
+
+        Queue<TreeNode> nodeQueue = new LinkedList<TreeNode>();
+        Queue<Integer> depthQueue = new LinkedList<Integer>();
+        nodeQueue.add(root);
+        depthQueue.add(0);
+
+        while (!nodeQueue.isEmpty()) {
+            TreeNode node = nodeQueue.remove();
+            int depth = depthQueue.remove();
+
+            if (node != null) {
+                // 维护二叉树的最大深度
+                max_depth = Math.max(max_depth, depth);
+
+                // 由于每一层最后一个访问到的节点才是我们要的答案，因此不断更新对应深度的信息即可
+                rightmostValueAtDepth.put(depth, node.val);
+
+                nodeQueue.add(node.left);
+                nodeQueue.add(node.right);
+                depthQueue.add(depth + 1);
+                depthQueue.add(depth + 1);
+            }
+        }
+
+        List<Integer> rightView = new ArrayList<Integer>();
+        for (int depth = 0; depth <= max_depth; depth++) {
+            rightView.add(rightmostValueAtDepth.get(depth));
+        }
+
+        return rightView;
+    }
+
+    List<Integer> res = new ArrayList<>();
+
+    /**
+     * DFS
+     * https://leetcode-cn.com/problems/binary-tree-right-side-view/comments/
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> rightSideViewDFS(TreeNode root) {
+        dfs(root, 0); // 从根节点开始访问，根节点深度是0
+        return res;
+    }
+
+    private void dfs(TreeNode root, int depth) {
+        if (root == null) {
+            return;
+        }
+        // 先访问 当前节点，再递归地访问 右子树 和 左子树。
+        if (depth == res.size()) {   // 如果当前节点所在深度还没有出现在res里，说明在该深度下当前节点是第一个被访问的节点，因此将当前节点加入res中。
+            res.add(root.val);
+        }
+        depth++;
+        dfs(root.right, depth);
+        dfs(root.left, depth);
+    }
+
 }

@@ -42,8 +42,8 @@ public class Sorts {
 //        int[] a = {4, 3, 6, 2};
         int[] a = {4, 5, 6, 3, 1, 2};
         Sorts.insertionSort(a, a.length);
-        Sorts.selectionSort(a, a.length);
-        Sorts.bubbleSortEvan(a);
+//        Sorts.selectionSort(a, a.length);
+//        Sorts.bubbleSortEvan(a);
         System.out.println(Arrays.toString(a));
     }
 

@@ -32,7 +32,7 @@ public class TestAidlServer extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.e(TAG,"onBind. intent = "+intent+ " return binder = "+mBinder+ " binder.hashCode = "+mBinder.hashCode() +" getClass = " +mBinder.getClass());
+        Log.e(TAG,"onBind. intent = "+intent+ " return binder = "+mBinder+ " binder.hashCode = "+mBinder.hashCode() +" mBinder.getClass = " +mBinder.getClass());
         return mBinder;
     }
 
