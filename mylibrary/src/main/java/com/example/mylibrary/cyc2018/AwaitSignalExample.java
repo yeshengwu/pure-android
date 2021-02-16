@@ -3,7 +3,6 @@ package com.example.mylibrary.cyc2018;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -13,11 +12,16 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class AwaitSignalExample {
 
-    private Lock lock = new ReentrantLock();
+    private ReentrantLock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();
 
     private void before() {
         System.out.println("before out lock");
+        if (lock.isLocked()) {
+            System.out.println("before out lock. isLocked");
+        } else {
+            System.out.println("before out lock. isLocked false");
+        }
         lock.lock();
         try {
             System.out.println("before in lock signal1");
@@ -31,6 +35,13 @@ public class AwaitSignalExample {
 
     private void after() {
         System.out.println("after out lock");
+
+        if (lock.isLocked()) {
+            System.out.println("after out lock. isLocked");
+        } else {
+            System.out.println("after out lock. isLocked false");
+        }
+
         lock.lock();
         try {
             System.out.println("after in lock await1");

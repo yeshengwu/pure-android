@@ -59,9 +59,24 @@ public class TestLinkList {
         // 快慢指针
         ListNode slow = head;
         ListNode fast = head;
+
+        // solution 1
+//        while (fast != null && k-- > 0) {
+//            fast = fast.next;
+//        }
+//        if (k > 0) {
+//            return null;
+//        }
+
+        // solution 2
         for (int i = 0; i < k; i++) {
-            fast = fast.next;
+            if (fast.next != null) {
+                fast = fast.next;
+            } else {
+                return null;
+            }
         }
+
         while (fast != null) {
             fast = fast.next;
             slow = slow.next;
@@ -82,14 +97,60 @@ public class TestLinkList {
 //        node3.next = node4;
 //        node4.next = node5;
 
-//        ListNode theLast4Node = linkList.findTheLastKNode(node,5);
-//        System.out.println("theLast4Node = "+theLast4Node);
+        int lastK = 2;
+        ListNode theLastKNode = linkList.findTheLastKNode(node,lastK);
+        System.out.println("lastK = "+lastK+" theLastKNode = "+theLastKNode);
+
         ListNode head = null;
+        head = linkList.deleteLastKth(node,lastK);
+        System.out.println("lastK = "+lastK+" deleteLastKth = "+head);
 
 //        head = linkList.ReverseListEvan(node);
-        head = linkList.ReverseListRecursiveEvan(node);
-        System.out.println("ReverseList = " + head);
+//        head = linkList.ReverseListRecursiveEvan(node);
+//        System.out.println("ReverseList = " + head);
 
+    }
+
+    // 删除倒数第K个结点
+    public  ListNode deleteLastKth(ListNode head, int k) {
+
+        //        if (head == null) return null;
+//        // 快慢指针
+//        ListNode slow = head;
+//        ListNode fast = head;
+//
+//        // solution 1
+//        while (fast != null && k-- > 0) {
+//            fast = fast.next;
+//        }
+//        if (k > 0) {
+//            return null;
+//        }
+
+
+        ListNode fast = head;
+        int i = 1;
+        while (fast != null && i < k) {
+            fast = fast.next;
+            ++i;
+        }
+
+        if (fast == null) return head;
+
+        ListNode slow = head;
+        ListNode prev = null;
+        while (fast.next != null) {
+            fast = fast.next;
+            prev = slow;
+            slow = slow.next;
+        }
+
+        if (prev == null) {
+            head = head.next;
+        } else {
+            prev.next = prev.next.next;
+        }
+        return head;
     }
 
     public ListNode ReverseListEvan(ListNode head) {

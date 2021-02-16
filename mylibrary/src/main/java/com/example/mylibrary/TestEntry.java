@@ -5,8 +5,9 @@ import com.example.mylibrary.testconcurrcybook.Father;
 import com.example.mylibrary.testconcurrcybook.NormalClass;
 import com.example.mylibrary.testconcurrcybook.ThisEscape;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 
@@ -87,7 +88,7 @@ public class TestEntry {
 //        CountDownLatch
 
         final NormalClass test = new NormalClass();
-        Thread AA = new Thread(new Runnable() {
+        Thread aaThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -96,8 +97,8 @@ public class TestEntry {
                     e.printStackTrace();
                 }
             }
-        }, "A");
-        AA.start();
+        }, "aaThread");
+        aaThread.start();
 
         try {
             Thread.sleep(2 * 1000);
@@ -105,15 +106,15 @@ public class TestEntry {
             e.printStackTrace();
         }
 
-//        Thread BB = new Thread(new Runnable() {
+//        Thread bbThread = new Thread(new Runnable() {
 //            @Override
 //            public void run() {
 //                test.doSomNotify();
 //            }
-//        },"B");
-//        BB.start();
+//        },"bbThread");
+//        bbThread.start();
 
-        AA.interrupt();
+        aaThread.interrupt();
 
         TestEntry entry = new TestEntry();
 
@@ -174,8 +175,32 @@ public class TestEntry {
             System.out.println(" else xxx ");
         }
 
+        // 我们知道目前a和b是两个不同的对象，他们在内存中存放的地址是不同的，
+        // System.identityHashCode方法是java根据对象在内存中的地址算出来的一个数值，不同的地址算出来的结果是不一样的。因此这里打印出的结果不一样。
+        String aaa = new String("hhh");
+        String bbb = new String("hhh");
+        // String类中已经重新写了hashCode()方法，也就是说，String类中hashcode，已经不是根据对象在内存中的地址计算出来的
+        // 日志如下：
+        // aaa identityHashCode 1173230247
+        //bbb identityHashCode 856419764
+        //aaa hashCode 103272
+        //bbb hashCode 103272
+        System.out.println("aaa identityHashCode "+ System.identityHashCode(aaa));
+        System.out.println("bbb identityHashCode "+ System.identityHashCode(bbb));
+        System.out.println("aaa hashCode "+ aaa.hashCode());
+        System.out.println("bbb hashCode "+ bbb.hashCode());
+        System.out.println("aaa Objects.hashCode "+  Objects.hashCode(aaa)); // 内部调用 o.hashCode()
+        System.out.println("bbb Objects.hashCode "+  Objects.hashCode(bbb));
 
+        TempClass tempClass = new TempClass("name",20);
+        System.out.println("tempClass hashCode "+ tempClass.hashCode());
 
+        // tables len = 10
+        //tables = [null, fuck, null, null, null, null, null, null, null, null]
+        String[] tables = new String[10];
+        tables[1] = "fuck";
+        System.out.println("tables len = "+ tables.length);
+        System.out.println("tables = "+ Arrays.toString(tables));
     }
 
     private Object getXX() {
