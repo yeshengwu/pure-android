@@ -13,6 +13,8 @@
 .externalNativeBuild
 .cxx
 
+/.idea/gradle.xml
+/.idea/misc.xml
 
 /.svn
 *.iml
