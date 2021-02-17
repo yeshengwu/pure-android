@@ -25,12 +25,16 @@ public class TestTree2 {
         System.out.println("isValidBST = "+isValidBST(root));
 
         TestTree2 testTree = new TestTree2();
-        TreeNode node2 = TestTree.preOrderTraversalSearch(root,7);
+        TreeNode node2 = TestTree.preOrderTraversalSearch(root,2);
         System.out.println("node2:"+node2);
-        TreeNode node8 = TestTree.preOrderTraversalSearch(root,9);
+        TreeNode node8 = TestTree.preOrderTraversalSearch(root,8);
         System.out.println("node8:"+node8);
-//        System.out.println("lowestCommonAncestor:");
-//        System.out.println(testTree.lowestCommonAncestor(root, node2, node8));
+        System.out.println("lowestCommonAncestor:");
+        TreeNode node4 = TestTree.preOrderTraversalSearch(root,4);
+        System.out.println("node4:"+node4);
+
+        System.out.println(testTree.lowestCommonAncestor(root, node2, node8));
+        System.out.println(testTree.lowestCommonAncestor_2(root, node2, node4));
     }
 
 
@@ -63,6 +67,20 @@ public class TestTree2 {
         return path;
     }
 
+
+    public static TreeNode lowestCommonAncestor_2(TreeNode root, TreeNode p, TreeNode q) {
+        TreeNode ancestor = root;
+        while (true){
+            if (ancestor.val>p.val && ancestor.val>q.val) {
+                ancestor = ancestor.left;
+            } else if (ancestor.val<p.val && ancestor.val<q.val){
+                ancestor = ancestor.right;
+            } else {
+                break;
+            }
+        }
+        return ancestor;
+    }
 
     /**
      * https://leetcode-cn.com/problems/validate-binary-search-tree/solution/yan-zheng-er-cha-sou-suo-shu-by-leetcode-solution/
