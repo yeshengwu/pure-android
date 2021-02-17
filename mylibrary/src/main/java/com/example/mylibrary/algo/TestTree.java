@@ -8,25 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+/**
+ * 树的一些基本功能：生成，遍历，查找
+ * TestTree2 TestTree3可以从这里调用基本功能。
+ */
 public class TestTree {
-    public static class TreeNode {
-        int val;
-        TreeNode left = null;
-        TreeNode right = null;
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        @Override
-        public String toString() {
-            return "TreeNode{" +
-                    "val=" + val +
-                    ", left=" + left +
-                    ", right=" + right +
-                    '}';
-        }
-    }
 
     /**
      * 关键字：   leetcode 二叉树 生成
@@ -386,6 +372,39 @@ public class TestTree {
         depth++;
         dfs(root.right, depth);
         dfs(root.left, depth);
+    }
+
+    /**
+     * 前序遍历查询
+     *
+     * @param node  根节点
+     * @param value
+     * @return
+     */
+    public static TreeNode preOrderTraversalSearch(TreeNode node, int value) {
+        //判断当前节点是不是为空，若不为空
+        if (node != null) {
+            //则判断需要查询的排名，与当前节点的排名是否相等
+            if (node.val == value) {
+                return node;
+            }
+        }
+        TreeNode resultNode = null;
+        //向左遍历，如果左子节点不为空
+        if (node.left != null) {
+            resultNode = preOrderTraversalSearch(node.left, value);
+            if (resultNode != null) {
+                return resultNode;
+            }
+        }
+        //向右遍历，如果左子节点不为空
+        if (node.right != null) {
+            resultNode = preOrderTraversalSearch(node.right, value);
+            if (resultNode != null) {
+                return resultNode;
+            }
+        }
+        return resultNode;
     }
 
 }

@@ -201,6 +201,12 @@ public class TestEntry {
         tables[1] = "fuck";
         System.out.println("tables len = "+ tables.length);
         System.out.println("tables = "+ Arrays.toString(tables));
+
+        int left = 1000000000;
+        int right = 2000000000; // Integer.MAX_VALUE = 2147483647 // Integer.MIN_VALUE = -2147483648
+//        int middle = (right + left) / 2;
+        int middle = left + (right - left) / 2;;
+        System.out.println("middle = "+ middle);
     }
 
     private Object getXX() {
