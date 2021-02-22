@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -20,6 +23,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mysecondlib.ITestC;
 import com.example.mylibrary.TestB;
 
 import java.io.FileWriter;
@@ -82,9 +86,21 @@ public class MainActivity extends Activity {
             }
         });
 
+        // 测试 module 间依赖: gradle api implementation 区别。
+        // app implementation 方式 ->b  b api方式 -> c. 这样 app 主模块能访问c
+        // b implementation 方式  -> c, app 主模块 无法访问c
+        // TestB 是 b 模块
         TestB dd = new TestB() {
         };
         AppCompatActivity compatActivity = new AppCompatActivity();
+        // ITestC 是 c 模块
+        ITestC testC = new ITestC(){
+            @Override
+            public void process(String args) {
+
+            }
+        };
+
         Log.e("evan", "context.classloader = " + Context.class.getClassLoader());
         Log.e("evan", "context.classloader parent = " + Context.class.getClassLoader().getParent());
         Log.e("evan", "getClassLoader = " + getClassLoader());
@@ -254,8 +270,24 @@ public class MainActivity extends Activity {
         Log.e("mark", "tag is mark");
         Log.e("evan", "downloadModule:tag is new format");
 
+        Bitmap mBitmap = BitmapFactory.decodeFile("");
+        Log.e("evan", "decodeFile return mBitmap = " + mBitmap);
+
 //        AppComponentFactory
+//        createPackageContext()
     }
+
+    private void ipcBitmapBinder() {
+        Bitmap mBitmap = BitmapFactory.decodeFile("");
+        Intent intent = new Intent(this, SecondActivity.class);
+        Bundle bundle = new Bundle();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            bundle.putBinder("bitmap", new BitmapBinder(mBitmap));
+        }
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onDestroy() {

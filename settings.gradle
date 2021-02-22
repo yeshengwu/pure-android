@@ -1,4 +1,4 @@
-include ':mylib'
+include ':mysecondlib'
 include ':mylibrary'
 include ':app'
 rootProject.name = "PureAndroid"

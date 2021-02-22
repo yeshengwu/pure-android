@@ -1,4 +1,4 @@
-package com.example.mylib;
+package com.example.mysecondlib;
 
 import org.junit.Test;
 
