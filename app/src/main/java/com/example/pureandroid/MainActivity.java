@@ -9,11 +9,13 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.StatFs;
@@ -28,17 +30,20 @@ import com.example.mylibrary.TestB;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private IMyAidlInterface mMediaServer;
     private IBinder serviceBinder;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,25 +115,6 @@ public class MainActivity extends Activity {
         String a = null;
         testAddNull.add(a);
         Log.e("evan", "testAddNull " + testAddNull);
-//        Handler
-
-//        Looper.myLooper().setMessageLogging(new Printer() {
-//            @Override
-//            public void println(String x) {
-//                Log.e("evan", "IN myLooper println(x) x = " + x);
-//            }
-//        });
-
-        Handler uiHandler = new Handler();
-        Message message = Message.obtain(uiHandler, new Runnable() {
-            @Override
-            public void run() {
-                Log.e("evan", "IN message run");
-            }
-        });
-        uiHandler.sendMessage(message);
-//        Looper.myQueue();
-//        Looper.prepare();
 
         final HandlerThread handlerThread = new HandlerThread("name");
         final CountDownLatch latch = new CountDownLatch(1);
@@ -275,6 +261,165 @@ public class MainActivity extends Activity {
 
 //        AppComponentFactory
 //        createPackageContext()
+        // AsyncTask 子线程中调用此构造器方法,28版本 可行。因为AsyncTask源码内部 Handler 做了判断。
+        // 分析文章： https://mp.weixin.qq.com/s/5CeZ6NHF6dm3qN6RgzaGDQ
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AsyncTask<String,Integer,String> asyncTask = new AsyncTask<String, Integer, String>() {
+                    @Override
+                    protected void onPreExecute() {
+                        Log.e("evan","asyncTask onPreExecute. isMainUI = "+(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+
+                    @Override
+                    protected String doInBackground(String... strings) {
+                        Log.e("evan","asyncTask doInBackground isMainUI = "+(Looper.myLooper() == Looper.getMainLooper()));
+                        return "result";
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        Log.e("evan","asyncTask onPostExecute isMainUI = "+(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+                };
+                asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        }).start();
+
+        // Handler 处理分发消息代码A
+        /*public void dispatchMessage(Message msg) {
+            if (msg.callback != null) {
+                handleCallback(msg);
+            } else {
+                if (mCallback != null) {
+                    if (mCallback.handleMessage(msg)) {
+                        return;
+                    }
+                }
+                handleMessage(msg);
+            }
+        }*/
+
+        //        Handler
+//        Looper.myLooper().setMessageLogging(new Printer() {
+//            @Override
+//            public void println(String x) {
+//                Log.e("evan", "IN myLooper println(x) x = " + x);
+//            }
+//        });
+
+//        Looper.myQueue();
+//        Looper.prepare();
+
+        // Handler callback
+        mHandler = new LocalHandler(this, new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                // true false 决定要不要继续下发给 Handler 子类 handleMessage(),看上面代码片段消息代码A。
+                Log.e("evan","IN Handler Callback");
+                return true;
+            }
+        });
+        mHandler.sendEmptyMessage(MSG_1);
+
+//        mHandler = new LocalHandler(this);
+//        mHandler.sendEmptyMessage(MSG_1);
+
+        // msg callback
+//        Message msg = Message.obtain(mHandler, new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.e("evan","IN Message Runnable");
+//            }
+//        });
+//        msg.what = MSG_1;
+//        msg.obj = "msg.obj";
+//        mHandler.sendMessage(msg);
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Looper.prepare();
+//                mHandler = new LocalHandler(MainActivity.this);
+//                mHandler.sendEmptyMessage(MSG_1);
+//                Looper.loop();
+//            }
+//        }).start();
+        // Handler 处理分发消息代码 end
+
+        // sThreadLocal 测试。不同线程看道的视图是不同的
+       // 2021-02-25 12:06:10.169 19526-19526/com.example.pureandroid E/evan: main sThreadLocal get = is initialValue
+        //2021-02-25 12:06:10.169 19526-19526/com.example.pureandroid E/evan: main sThreadLocal2 get = 10086
+        //2021-02-25 12:06:10.169 19526-19526/com.example.pureandroid E/evan: main set value. sThreadLocal get = main set value
+        //2021-02-25 12:06:10.169 19526-19526/com.example.pureandroid E/evan: main set value. sThreadLocal2 get = 110
+        //2021-02-25 12:06:10.170 19526-19561/com.example.pureandroid E/evan: IN thread sThreadLocal get = is initialValue
+        //2021-02-25 12:06:10.170 19526-19561/com.example.pureandroid E/evan: IN thread sThreadLocal2 get = 10086
+        //2021-02-25 12:06:10.170 19526-19561/com.example.pureandroid E/evan: IN thread set value. sThreadLocal get = thread set value
+        //2021-02-25 12:06:10.171 19526-19561/com.example.pureandroid E/evan: IN thread set value. sThreadLocal2 get = 119
+        final ThreadLocal<String> sThreadLocal = new ThreadLocal<String>(){
+            @Nullable
+            @Override
+            protected String initialValue() {
+                return "is initialValue";
+            }
+        };
+        final ThreadLocal<Integer> sThreadLocal2 = new ThreadLocal<Integer>(){
+            @Nullable
+            @Override
+            protected Integer initialValue() {
+                return 10086;
+            }
+        };
+        Log.e("evan","main sThreadLocal get = "+sThreadLocal.get());
+        Log.e("evan","main sThreadLocal2 get = "+sThreadLocal2.get());
+        sThreadLocal.set("main set value");
+        sThreadLocal2.set(110);
+        Log.e("evan","main set value. sThreadLocal get = "+sThreadLocal.get());
+        Log.e("evan","main set value. sThreadLocal2 get = "+sThreadLocal2.get());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("evan","IN thread sThreadLocal get = "+sThreadLocal.get());
+                Log.e("evan","IN thread sThreadLocal2 get = "+sThreadLocal2.get());
+                sThreadLocal.set("thread set value");
+                sThreadLocal2.set(119);
+                Log.e("evan","IN thread set value. sThreadLocal get = "+sThreadLocal.get());
+                Log.e("evan","IN thread set value. sThreadLocal2 get = "+sThreadLocal2.get());
+            }
+        }).start();
+    }
+
+    private static final int MSG_1 = 1;
+    private static class LocalHandler extends Handler {
+        WeakReference<MainActivity> weakReference;
+
+        LocalHandler(MainActivity activity) {
+            super();
+            weakReference = new WeakReference<>(activity);
+        }
+
+        LocalHandler(MainActivity activity,Callback callback) {
+            super(callback);
+            weakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity activity = weakReference.get();
+            if (activity == null) {
+                Log.e("evan","handleMessage activity = null. return");
+                return;
+            }
+            switch (msg.what) {
+                case MSG_1:
+                    Log.e("evan","handleMessage = " + MSG_1);
+                break;
+                default:
+                    break;
+            }
+        }
     }
 
     private void ipcBitmapBinder() {
