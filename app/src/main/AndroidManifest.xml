@@ -25,10 +25,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".SecondActivity"
+            />
 
         <activity
+            android:name=".TestActivity"
+            />
+        <activity
             android:name=".TestActivityWithConstructor"
-            android:screenOrientation="portrait" />
+            />
         <activity
             android:name=".TestLayoutAc"
             android:screenOrientation="portrait" />

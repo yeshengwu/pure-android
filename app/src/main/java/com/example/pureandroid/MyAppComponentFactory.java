@@ -27,10 +27,10 @@ public class MyAppComponentFactory extends AppComponentFactory {
         }*/
 
         Class<?> activityClass = cl.loadClass(className);
-        if (activityClass.equals(TestActivityWithConstructor.class)) {
-            return new TestActivityWithConstructor("This is injected");
-        } else {
+//        if (activityClass.equals(TestActivityWithConstructor.class)) {
+//            return new TestActivityWithConstructor("This is injected");
+//        } else {
             return super.instantiateActivity(cl, className, intent);
-        }
+//        }
     }
 }

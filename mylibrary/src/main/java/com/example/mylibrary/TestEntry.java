@@ -5,8 +5,10 @@ import com.example.mylibrary.testconcurrcybook.Father;
 import com.example.mylibrary.testconcurrcybook.NormalClass;
 import com.example.mylibrary.testconcurrcybook.ThisEscape;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -194,6 +196,19 @@ public class TestEntry {
 
         TempClass tempClass = new TempClass("name",20);
         System.out.println("tempClass hashCode "+ tempClass.hashCode());
+        // ArrayList hashCode 变化：System.identityHashCode 这个随着元素添加一直不变，其他2个会变化
+        List<TempClass> testListForHash = new ArrayList<>();
+        System.out.println("testListForHash before add. identityHashCode "+ System.identityHashCode(testListForHash));
+        testListForHash.add(tempClass);
+        System.out.println("testListForHash after add. identityHashCode "+ System.identityHashCode(testListForHash));
+        System.out.println("testListForHash after hashCode "+ testListForHash.hashCode());
+        System.out.println("testListForHash after Objects.hashCode "+  Objects.hashCode(testListForHash));
+        TempClass tempClass2 = new TempClass("name2",22);
+        testListForHash.add(tempClass2);
+        System.out.println("testListForHash after2 add. identityHashCode "+ System.identityHashCode(testListForHash));
+        System.out.println("testListForHash after2 hashCode "+ testListForHash.hashCode());
+        System.out.println("testListForHash after2 Objects.hashCode "+  Objects.hashCode(testListForHash));
+        // end ArrayList hashCode
 
         // tables len = 10
         //tables = [null, fuck, null, null, null, null, null, null, null, null]

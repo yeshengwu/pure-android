@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.example.pureandroid"
         minSdkVersion 21
-        targetSdkVersion 22
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -64,4 +64,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     api project(path: ':mylibrary')
+
+    debugImplementation rootProject.ext.DependenciesName.leakcanary_android
+//    releaseImplementation rootProject.ext.DependenciesName.leakcanary_no_op
+    debugImplementation rootProject.ext.DependenciesName.leakcanary_fragment
 }

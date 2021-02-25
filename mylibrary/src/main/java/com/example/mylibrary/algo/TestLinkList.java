@@ -1,91 +1,13 @@
 package com.example.mylibrary.algo;
 
+/**
+ * 自己实现测试手写。技巧方法：
+ * 一题多解，来加强理解：比如反转链表方法： 递归，虚拟节点头插法，当前指针加上个指针法。
+ *
+ */
 public class TestLinkList {
 
-    public static class ListNode {
-        int val;
-        ListNode next = null;
-
-        ListNode(int val) {
-            this.val = val;
-        }
-
-        @Override
-        public String toString() {
-            return "ListNode{" +
-                    "val=" + val +
-                    ", next=" + next +
-                    '}';
-        }
-    }
-
-
-    public ListNode ReverseList(ListNode head) {
-        // my wrong
-//            if(head == null ) {
-//                return head;
-//            }
-//            ListNode next = head.next;
-//            next.next= head;
-//            head = next;
-//            head.next = null;
-//            return  ReverseList(head);
-
-        // right
-        if (head == null || head.next == null)
-            return head;
-        ListNode next = head.next;
-        head.next = null;
-        ListNode newHead = ReverseList(next);
-        next.next = head;
-        return newHead;
-    }
-
-
-//    public ListNode ReverseList(ListNode head) {
-//        ListNode newList = new ListNode(-1);
-//        while (head != null) {
-//            ListNode next = head.next;
-//            head.next = newList.next;
-//            newList.next = head;
-//            head = next;
-//        }
-//        return newList.next;
-//    }
-
-
-    public ListNode findTheLastKNode(ListNode head, int k) {
-        if (head == null) return null;
-        // 快慢指针
-        ListNode slow = head;
-        ListNode fast = head;
-
-        // solution 1
-//        while (fast != null && k-- > 0) {
-//            fast = fast.next;
-//        }
-//        if (k > 0) {
-//            return null;
-//        }
-
-        // solution 2
-        for (int i = 0; i < k; i++) {
-            if (fast.next != null) {
-                fast = fast.next;
-            } else {
-                return null;
-            }
-        }
-
-        while (fast != null) {
-            fast = fast.next;
-            slow = slow.next;
-        }
-        return slow;
-    }
-
     public static void main(String[] args) {
-
         TestLinkList linkList = new TestLinkList();
         TestLinkList.ListNode node = new TestLinkList.ListNode(1);
         TestLinkList.ListNode node2 = new TestLinkList.ListNode(2);
@@ -208,5 +130,72 @@ public class TestLinkList {
         return reverse;
     }
 
+    public ListNode ReverseList(ListNode head) {
+        // my wrong
+//            if(head == null ) {
+//                return head;
+//            }
+//            ListNode next = head.next;
+//            next.next= head;
+//            head = next;
+//            head.next = null;
+//            return  ReverseList(head);
+
+        // right
+        if (head == null || head.next == null)
+            return head;
+        ListNode next = head.next;
+        head.next = null;
+        ListNode newHead = ReverseList(next);
+        next.next = head;
+        return newHead;
+    }
+
+    public ListNode findTheLastKNode(ListNode head, int k) {
+        if (head == null) return null;
+        // 快慢指针
+        ListNode slow = head;
+        ListNode fast = head;
+
+        // solution 1
+//        while (fast != null && k-- > 0) {
+//            fast = fast.next;
+//        }
+//        if (k > 0) {
+//            return null;
+//        }
+
+        // solution 2
+        for (int i = 0; i < k; i++) {
+            if (fast.next != null) {
+                fast = fast.next;
+            } else {
+                return null;
+            }
+        }
+
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+    public static class ListNode {
+        int val;
+        ListNode next = null;
+
+        ListNode(int val) {
+            this.val = val;
+        }
+
+        @Override
+        public String toString() {
+            return "ListNode{" +
+                    "val=" + val +
+                    ", next=" + next +
+                    '}';
+        }
+    }
 
 }

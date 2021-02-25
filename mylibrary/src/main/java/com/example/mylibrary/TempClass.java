@@ -30,6 +30,4 @@ public class TempClass {
         return Objects.hash(name, age);
     }
 
-
-
 }

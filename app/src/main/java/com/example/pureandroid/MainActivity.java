@@ -63,8 +63,8 @@ public class MainActivity extends Activity {
 //                Intent intent = new Intent(MainActivity.this, HookCloseGuardActivity.class);
 //                startActivity(intent);
 
-//                Intent intent = new Intent(MainActivity.this, TestActivityWithConstructor.class);
-//                startActivity(intent);
+                Intent intent2 = new Intent(MainActivity.this, TestActivity.class);
+                startActivity(intent2);
                 Log.e("evan", "this = " + this);
             }
         });
