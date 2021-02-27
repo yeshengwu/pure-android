@@ -25,8 +25,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mysecondlib.ITestC;
 import com.example.mylibrary.TestB;
+import com.example.mysecondlib.ITestC;
+import com.example.pureandroid.livedata.TestLiveDataAc;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -63,8 +64,11 @@ public class MainActivity extends Activity {
 //                Intent intent = new Intent(MainActivity.this, HookCloseGuardActivity.class);
 //                startActivity(intent);
 
-                Intent intent2 = new Intent(MainActivity.this, TestActivity.class);
-                startActivity(intent2);
+//                Intent intent2 = new Intent(MainActivity.this, TestActivity.class);
+//                startActivity(intent2);
+
+                Intent intent3 = new Intent(MainActivity.this, TestLiveDataAc.class);
+                startActivity(intent3);
                 Log.e("evan", "this = " + this);
             }
         });
@@ -389,6 +393,36 @@ public class MainActivity extends Activity {
                 Log.e("evan","IN thread set value. sThreadLocal2 get = "+sThreadLocal2.get());
             }
         }).start();
+
+        // 同一个线程可以有多个 Handler.
+        Message messageA = Message.obtain();
+        messageA.what = 1;
+        Message messageB = Message.obtain();
+        messageB.what = 2;
+
+        Handler handlerA = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                Log.e("evan", "In handlerA handleMessage. msg = "+msg);
+            }
+        };
+
+        Handler handlerB = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                Log.e("evan", "In handlerB handleMessage. msg = "+msg);
+            }
+        };
+
+        // 同一个消息发送会报错：
+        //     MessageQueue.java
+        //    if (msg.isInUse()) {
+        //            throw new IllegalStateException(msg + " This message is already in use.");
+        //        }
+//        handlerA.sendMessage(messageA);
+//        handlerB.sendMessage(messageA);
+        handlerA.sendMessage(messageA);
+        handlerB.sendMessage(messageB);
     }
 
     private static final int MSG_1 = 1;

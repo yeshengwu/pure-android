@@ -38,6 +38,11 @@
         <activity
             android:name=".TestLayoutAc"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".livedata.TestLiveDataAc"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".HookCloseGuardActivity"
             android:screenOrientation="portrait" />

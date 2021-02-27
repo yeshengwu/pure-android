@@ -210,6 +210,14 @@ public class LinkedListAlgo {
         public int getData() {
             return data;
         }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "data=" + data +
+                    ", next=" + next +
+                    '}';
+        }
     }
 
     public static void main(String[] args) {
@@ -226,13 +234,13 @@ public class LinkedListAlgo {
 
 //        head.next = node1;
         node1.next = node3;
-        node3.next = node5;
+//        node3.next = node5;
 
         LinkedListAlgo.printAll(node1);
 
         node2.next = node4;
-        node4.next = node6;
-        node6.next = node7;
+//        node4.next = node6;
+//        node6.next = node7;
         LinkedListAlgo.printAll(node2);
 
         /**
@@ -240,22 +248,33 @@ public class LinkedListAlgo {
          *
          * nodeXX start:
          * 1 3 5
-         * nodeXX set next:
+         * nodeXX set next. next is:
+         * 2 4 6 7
+         * nodeXX after set next. nodeXX is:
          * 1 2 4 6 7
-         * nodeXX after node1:
+         * nodeXX after set next. node1 is:
          * 1 2 4 6 7
          */
         /*Node nodeXX = node1;
         System.out.println("nodeXX start:");
         LinkedListAlgo.printAll(nodeXX);
         nodeXX.next = node2;
-        System.out.println("nodeXX set next:");
+        System.out.println("nodeXX set next. next is:");
+        LinkedListAlgo.printAll(node2);
+        System.out.println("nodeXX after set next. nodeXX is:");
         LinkedListAlgo.printAll(nodeXX);
-        System.out.println("nodeXX after. node1:");
+        System.out.println("nodeXX after set next. node1 is:");
         LinkedListAlgo.printAll(node1);*/
 
 //        Node merged = LinkedListAlgo.mergeSortedLists(node1,node2);
-        Node merged = LinkedListAlgo.Merge(node1,node2);
+//        Node merged = LinkedListAlgo.Merge(node1,node2);
+
+        /**
+         * 测试数据好理解一点，不要太长容易晕。
+         * 1 3
+         * 2 4
+         */
+        Node merged = LinkedListAlgo.MergeEvan(node1,node2);
         LinkedListAlgo.printAll(merged);
 
 //        Node middleNode = LinkedListAlgo.findMiddleNode(node1);
@@ -270,10 +289,19 @@ public class LinkedListAlgo {
     }
 
     /**
+     * 思考过程怎么转换成代码？
+     * 代码只是思考后的成品而已，应该要知道思考过程，
+     * 为什么这么思考，目的是解决什么问题，所以思考过程
+     * 一定要写下来。有了想法就好办，否则光记代码几天又忘记了
+     * 目标是：一看思考过程和思考思路马上就能知道代码怎么写。2021-2-21
+     *
+     * https://blog.csdn.net/u013486414/article/details/104889368/  算法题做到崩溃？刷了几千道算法题，关于如何刷题有些话我想对你说
+     *
+     */
+    /**
      * https://www.youtube.com/watch?v=yuMEpwt-YB4
      * @param list1
      * @param list2
-     * @return
      */
     public static Node MergeEvan(Node list1, Node list2) {
 
@@ -290,8 +318,7 @@ public class LinkedListAlgo {
         }
 
         Node cur = head3;
-        System.out.println(cur);
-        System.out.println(head3);
+        System.out.println("result head init = "+head3);
         while (list1 != null && list2 != null) {
             if (list1.data < list2.data) {
                 cur.next = list1;
@@ -300,7 +327,6 @@ public class LinkedListAlgo {
                 cur.next = list2;
                 list2 = list2.next;
             }
-
             cur = cur.next;
         }
 
