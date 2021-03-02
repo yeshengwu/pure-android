@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.example.mylibrary.TestB;
 import com.example.mysecondlib.ITestC;
-import com.example.pureandroid.livedata.TestLiveDataAc;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -67,9 +66,15 @@ public class MainActivity extends Activity {
 //                Intent intent2 = new Intent(MainActivity.this, TestActivity.class);
 //                startActivity(intent2);
 
-                Intent intent3 = new Intent(MainActivity.this, TestLiveDataAc.class);
-                startActivity(intent3);
+//                Intent intent3 = new Intent(MainActivity.this, TestLiveDataAc.class);
+//                startActivity(intent3);
+
+                Intent intent4 = new Intent(MainActivity.this, TestHandlerAc.class);
+                startActivity(intent4);
+
                 Log.e("evan", "this = " + this);
+
+
             }
         });
 

@@ -52,6 +52,13 @@
             android:name=".TestAidlServer"
             android:enabled="true"
             android:process=":service"></service>
+
+        <service android:name=".TestIntentService"/>
+
+        <activity
+            android:name=".TestHandlerAc"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

@@ -225,6 +225,9 @@ public class TestTree {
         System.out.println(rightSideView(root));
         System.out.println("rightSideViewDFS:");
         System.out.println(testTree.rightSideViewDFS(root));
+        System.out.println("invertTree:");
+        testTree.invertTree(root);
+        System.out.println(PrintFromTopToBottom(root));
     }
 
     /**
@@ -372,6 +375,24 @@ public class TestTree {
         depth++;
         dfs(root.right, depth);
         dfs(root.left, depth);
+    }
+
+    /**
+     * 226. 翻转二叉树
+     * https://leetcode-cn.com/problems/invert-binary-tree/comments/
+     * @param root
+     * @return
+     */
+    public static TreeNode invertTree(TreeNode root){
+        if (root == null) {
+            return null;
+        }
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        invertTree(root.left);
+        invertTree(root.right);
+        return root;
     }
 
     /**
