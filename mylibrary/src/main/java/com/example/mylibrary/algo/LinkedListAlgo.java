@@ -122,6 +122,69 @@ public class LinkedListAlgo {
         return head;
     }
 
+    /**
+     * 思考过程怎么转换成代码？
+     * 代码只是思考后的成品而已，应该要知道思考过程，
+     * 为什么这么思考，目的是解决什么问题，所以思考过程
+     * 一定要写下来。有了想法就好办，否则光记代码几天又忘记了
+     * 目标是：一看思考过程和思考思路马上就能知道代码怎么写。2021-2-21
+     *
+     * https://blog.csdn.net/u013486414/article/details/104889368/  算法题做到崩溃？刷了几千道算法题，关于如何刷题有些话我想对你说
+     *
+     */
+
+    /**
+     * 跟上面 mergeSortedLists 一样，还少定义了 p,q
+     * https://www.youtube.com/watch?v=yuMEpwt-YB4
+     * @param list1
+     * @param list2
+     * @return
+     */
+    public static Node MergeEvan(Node list1, Node list2) {
+
+        if (list1 == null) return null;
+        if (list2 == null) return null;
+
+        Node head3 = null;
+        if (list1.data < list2.data) {
+            head3 = list1;
+            list1 = list1.next;
+        } else {
+            head3 = list2;
+            list2 = list2.next;
+        }
+
+        Node cur = head3;
+        System.out.println(cur);
+        System.out.println(head3);
+        while (list1 != null && list2 != null) {
+            if (list1.data < list2.data) {
+                cur.next = list1;
+                list1 = list1.next;
+            } else {
+                cur.next = list2;
+                list2 = list2.next;
+            }
+
+            cur = cur.next;
+        }
+
+        if (list1 == null) {
+            cur.next = list2;
+        } else {
+            cur.next = list1;
+        }
+
+        return head3;
+    }
+
+    /**
+     * 动画演示 #21 合并两个有序链表  看清怎么串起来的过程
+     * https://leetcode-cn.com/problems/merge-two-sorted-lists/solution/dong-hua-yan-shi-21-he-bing-liang-ge-you-blxu/793057
+     * @param list1
+     * @param list2
+     * @return
+     */
     public static Node Merge(Node list1, Node list2) {
         Node head = new Node(-1, null);
         Node cur = head;
@@ -141,7 +204,6 @@ public class LinkedListAlgo {
             cur.next = list2;
         return head.next;
     }
-
 
     // 删除倒数第K个结点
     public static Node deleteLastKth(Node list, int k) {
@@ -287,56 +349,4 @@ public class LinkedListAlgo {
         LinkedListAlgo.printAll(reverseHead);
 
     }
-
-    /**
-     * 思考过程怎么转换成代码？
-     * 代码只是思考后的成品而已，应该要知道思考过程，
-     * 为什么这么思考，目的是解决什么问题，所以思考过程
-     * 一定要写下来。有了想法就好办，否则光记代码几天又忘记了
-     * 目标是：一看思考过程和思考思路马上就能知道代码怎么写。2021-2-21
-     *
-     * https://blog.csdn.net/u013486414/article/details/104889368/  算法题做到崩溃？刷了几千道算法题，关于如何刷题有些话我想对你说
-     *
-     */
-    /**
-     * https://www.youtube.com/watch?v=yuMEpwt-YB4
-     * @param list1
-     * @param list2
-     */
-    public static Node MergeEvan(Node list1, Node list2) {
-
-        if (list1 == null) return null;
-        if (list2 == null) return null;
-
-        Node head3 = null;
-        if (list1.data < list2.data) {
-            head3 = list1;
-            list1 = list1.next;
-        } else {
-            head3 = list2;
-            list2 = list2.next;
-        }
-
-        Node cur = head3;
-        System.out.println("result head init = "+head3);
-        while (list1 != null && list2 != null) {
-            if (list1.data < list2.data) {
-                cur.next = list1;
-                list1 = list1.next;
-            } else {
-                cur.next = list2;
-                list2 = list2.next;
-            }
-            cur = cur.next;
-        }
-
-        if (list1 == null) {
-            cur.next = list2;
-        } else {
-            cur.next = list1;
-        }
-
-        return head3;
-    }
-
 }

@@ -1,16 +1,21 @@
 package com.example.mylibrary.algo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TestLeetCode {
     public static void main(String[] args) {
 //        int[] a = {3,4,5,1,2};
 //        int[] a = {2,2,2,0,1};
-        int[] a = {4,3,4,4,4};
+//        int[] a = {3,3};
+        int[] a = {0,4,3,0};
 //        int minInArray = TestLeetCode.minArray(a);
-        int minInArray = TestLeetCode.minArray_2(a);
-        System.out.println("minInArray = " + minInArray);
+//        int minInArray = TestLeetCode.minArray_2(a);
+//        System.out.println("minInArray = " + minInArray);
+//        int[] twoSumTables = TestLeetCode.twoSum_1(a,6);
+        int[] twoSumTables = TestLeetCode.twoSum_2(a,0);
+        System.out.println("twoSum = " + Arrays.toString(twoSumTables));
     }
 
     /**
@@ -82,5 +87,74 @@ public class TestLeetCode {
         return numbers[right];
     }
 
+
+
+    /**
+     * 万事开头难的 leetcode 第一题，
+     * 暴力解法
+     * https://leetcode-cn.com/problems/two-sum/
+     * @param nums
+     * @param target
+     * @return
+     */
+    public static int[] twoSum_1(int[] nums, int target) {
+        int[] res = new int[2];
+        for(int i = 0;i<nums.length;i++){
+            for (int j = i+1;j<nums.length;j++){
+                if (nums[i]+nums[j] == target) {
+                    res[0] = i;
+                    res[1] = j;
+                    return res;
+                }
+
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 万事开头难的 leetcode 第一题，
+     *  target -target hashMap 解法
+     * https://leetcode-cn.com/problems/two-sum/
+     * @param nums
+     * @param target
+     * @return
+     */
+    public static int[] twoSum_2_evan(int[] nums, int target) {
+        int[] res = new int[2];
+        Map<Integer, Integer> targetLeftMap = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int left = target - nums[i];
+            targetLeftMap.put(i, left);
+            for (int j = i + 1; j < nums.length; j++) {
+                if (targetLeftMap.containsValue(nums[j])) {
+                    res[0] = i;
+                    res[1] = j;
+                    return res;
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 万事开头难的 leetcode 第一题，
+     *  target -target hashMap 解法
+     * https://leetcode-cn.com/problems/two-sum/
+     * @param nums
+     * @param target
+     * @return
+     */
+    public static int[] twoSum_2(int[] nums, int target) {
+        int[] res = new int[2];
+        Map<Integer, Integer> hashtable = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nums.length; ++i) {
+            if (hashtable.containsKey(target - nums[i])) {
+                return new int[]{hashtable.get(target - nums[i]), i};
+            }
+            hashtable.put(nums[i], i);
+        }
+        return res;
+    }
 
 }
