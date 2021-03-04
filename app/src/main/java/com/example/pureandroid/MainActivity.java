@@ -190,6 +190,10 @@ public class MainActivity extends Activity {
         // 链表遍历查找，如果存在，删除存在的元素，将该元素插入进头部
         // 如果不存在返回空
 
+        // 2021-3-4 evan: 头插法，首先 画个 lru 数字测试表哈，经常画的  1 2 3 4 2 1 5 2 3 1 栈大小为3
+        // 那么头插法实现，就是  1 再就2 插入，结果 2->1, 3插入后 3->2->1 4插入发现满了 删除最后一个元素3，然后将4插入头部
+        // 就是 4->3->2  依次类推，关键就是头插法，后插入的做为头就明白了。
+
         LruCache<String, String> lruCache = new LruCache<String, String>(2) {
             @Override
             protected void entryRemoved(boolean evicted, String key, String oldValue, String newValue) {
