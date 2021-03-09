@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -39,6 +41,30 @@ public class TestHandlerAc extends Activity {
         message.what = MSG_1;
 
         mHandler.sendMessageDelayed(message, 10 * 1000);
+        // android.view.WindowManager$BadTokenException: Unable to add window -- token null is not valid; is your activity running?
+        // PopupWindow
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // android.view.WindowManager$BadTokenException: Unable to add window -- token null is not valid; is your activity running?
+        // PopupWindow
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        // 场景： android popupwindow onCreate
+        // https://www.cnblogs.com/yulook/p/5570593.html android 关于无法在onCreate方法中显示popUpWindow的解决方案
+        if (hasFocus) {
+            PopupWindow popupWindow = new PopupWindow(TestHandlerAc.this);
+            TextView xx = new TextView(TestHandlerAc.this);
+            xx.setLayoutParams(new LinearLayout.LayoutParams(200,200));
+            xx.setBackgroundColor(TestHandlerAc.this.getColor(R.color.colorAccent));
+            xx.setText("test popupWindow");
+            popupWindow.setContentView(xx);
+            popupWindow.showAsDropDown(getWindow().getDecorView(),300,200);
+        }
     }
 
     private static final int MSG_1 = 1;
