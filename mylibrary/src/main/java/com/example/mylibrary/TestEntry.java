@@ -222,7 +222,25 @@ public class TestEntry {
 //        int middle = (right + left) / 2;
         int middle = left + (right - left) / 2;;
         System.out.println("middle = "+ middle);
+
+        System.out.println("findX = "+ findX());
+
     }
+
+    private static int findX() {
+        for(int x = 0; x < 4; x++) {
+            int dis_a = (x != 0) ? 1 : 0;
+            int dis_b = (x == 2) ? 1 : 0;
+            int dis_c = (x == 3) ? 1 : 0;
+            int dis_d = (x != 3) ? 1 : 0;
+            if (dis_a + dis_b + dis_c + dis_d == 3) {
+                // find thief, number is x
+                return x;
+            }
+        }
+        return -1;
+    }
+
 
     private Object getXX() {
         return new Father();
