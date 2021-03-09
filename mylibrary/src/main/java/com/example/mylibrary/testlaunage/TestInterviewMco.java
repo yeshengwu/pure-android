@@ -11,7 +11,7 @@ public class TestInterviewMco {
     public static void main(String[] args) {
         A bb = new A();
         try {
-            Thread.sleep(2*1000);
+            Thread.sleep(1*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -28,18 +28,28 @@ public class TestInterviewMco {
         String inter = sss.intern();
         System.out.println("inter ==  "+inter+ " inter == sss "+(sss == inter));
 
-        // 两种情况下 String 调用 change() 都是不变的，还是输出  abc
+        // String 两种情况下 String 调用 change() 都是不变的，还是输出  abc
 //        String ddd = new String("abc");
         String ddd = "abc";
 
         char[] chars = new char[]{'a','b','c'};
         change(ddd,chars);
         System.out.println("str = "+ddd+ " chars = "+ Arrays.toString(chars));
+
+        // 对象情况下  调用 change() 是变的
+        Person aPersion = new Person("oldName");
+        System.out.println("before change: aPersion = "+aPersion);
+        change_obj(aPersion);
+        System.out.println("after change: aPersion = "+aPersion);
     }
 
     static void change(String ddd, char[] chars){
         ddd = "gbc";
         chars[0] = 'g';
+    }
+
+    static void change_obj(Person ddd){
+        ddd.name = "newName";
     }
 
     static class A {
@@ -69,5 +79,20 @@ public class TestInterviewMco {
             System.out.println("b");
         }
 
+    }
+
+    static class Person {
+        public String name;
+
+        public Person(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return "Person{" +
+                    "name='" + name + '\'' +
+                    '}';
+        }
     }
 }
