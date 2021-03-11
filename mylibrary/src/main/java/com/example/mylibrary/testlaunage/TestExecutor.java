@@ -18,14 +18,18 @@ public class TestExecutor {
         // 断点调试经验： ThreadPoolExecutor 这个类里的 execute 方法实现逻辑： As 调试发现不行，字节码不匹配。
         // 因为这个是 java sdk 跑的运行方式，点源码进去又是 android.jar 里的 ThreadPoolExecutor。
         // 解决： 另外开一个 Idea 专门 运行 java 项目的，那里可以断点调试。调试发现： 当 是无界队列时， a b 都没有走
-        // 依然 任务 3 4 会被等待调度，不会执行 a 的拒绝或者 b的添加子线程。 真他妈需要看代码才知道。
+        // 依然 任务 3 4 会被等待调度，不会执行 a 的拒绝或者 b的添加子线程。
+        // 注意， c 这个地方就是 创建 新线程的， c 那里如果创建成功就返回 true, 这样 d 就不会走了，刚开始傻了没
+        // 看 c 是干嘛的，以为只是判断语句，其实 是干了事情的（敲重点）， 差点 忽略导致理解不清楚整个流程。真他妈需要认真严谨（而不是忽略视而不见旧毛病）看代码才知道。
         // if (isRunning(c) && workQueue.offer(command)) {
-        //            int recheck = ctl.get();
-        //            if (! isRunning(recheck) && remove(command))
-        //                reject(command);  // a
-        //            else if (workerCountOf(recheck) == 0)
-        //                addWorker(null, false); // b
-        //        }
+        //     int recheck = ctl.get();
+        //     if (! isRunning(recheck) && remove(command))
+        //         reject(command);  // a
+        //      else if (workerCountOf(recheck) == 0)
+        //        addWorker(null, false); // b
+        //    }
+        //  else if (!addWorker(command, false)) // c
+        //            reject(command);  // d
         // 这就叫 他妈的深刻理解。 2021-3-11
 
         // 4个任务。1 2 都是延迟5秒的任务。 3 4 秒出。
