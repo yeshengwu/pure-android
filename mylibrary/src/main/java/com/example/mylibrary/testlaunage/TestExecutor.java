@@ -15,6 +15,17 @@ public class TestExecutor {
         // 如果 无法继续创建线程 导致执行效率降低一半。
 
         // 感悟：可能这样才算深入理解吧，用代码去验证，上面说 新手犯错，那后果是什么呢？没说，只能自己去验证，
+        // 断点调试经验： ThreadPoolExecutor 这个类里的 execute 方法实现逻辑： As 调试发现不行，字节码不匹配。
+        // 因为这个是 java sdk 跑的运行方式，点源码进去又是 android.jar 里的 ThreadPoolExecutor。
+        // 解决： 另外开一个 Idea 专门 运行 java 项目的，那里可以断点调试。调试发现： 当 是无界队列时， a b 都没有走
+        // 依然 任务 3 4 会被等待调度，不会执行 a 的拒绝或者 b的添加子线程。 真他妈需要看代码才知道。
+        // if (isRunning(c) && workQueue.offer(command)) {
+        //            int recheck = ctl.get();
+        //            if (! isRunning(recheck) && remove(command))
+        //                reject(command);  // a
+        //            else if (workerCountOf(recheck) == 0)
+        //                addWorker(null, false); // b
+        //        }
         // 这就叫 他妈的深刻理解。 2021-3-11
 
         // 4个任务。1 2 都是延迟5秒的任务。 3 4 秒出。
@@ -40,7 +51,7 @@ public class TestExecutor {
 //                new LinkedBlockingQueue<Runnable>(1));
         ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 3,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>()); // 这里 用无界 MAX_VALUE，或者大于 2的 比如128是一样的。队列满不了
+                new LinkedBlockingQueue<Runnable>(3)); // 这里 用无界 MAX_VALUE，或者大于 2的 比如128是一样的。队列满不了
 
         executor.execute(new Runnable() {
             @Override
