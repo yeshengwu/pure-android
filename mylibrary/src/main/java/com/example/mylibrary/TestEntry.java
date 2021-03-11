@@ -225,6 +225,12 @@ public class TestEntry {
 
         System.out.println("findX = "+ findX());
 
+        String str1=new String("Hello World");
+        String str2=new String("Hello World");
+        String str3="Hello World";
+        String str4="Hello World";
+        System.out.println("str1 == str2 "+ (str1 == str2)+ " equals "+(str1.equals(str2)));
+        System.out.println("str3 == str4 "+ (str3 == str4)+ " equals "+(str3.equals(str4)));
     }
 
     private static int findX() {
