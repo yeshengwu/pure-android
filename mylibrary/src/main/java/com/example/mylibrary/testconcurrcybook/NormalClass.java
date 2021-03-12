@@ -3,6 +3,10 @@ package com.example.mylibrary.testconcurrcybook;
 public class NormalClass {
     private final Object lock = new Object();
 
+//     class InnerClass {
+//         static int a; // Inner classes cannot have static declarations
+//    }
+
     public void doSomethingWait() throws InterruptedException {
         System.out.println("doSomething. current thread = " + Thread.currentThread());
         synchronized (lock) {

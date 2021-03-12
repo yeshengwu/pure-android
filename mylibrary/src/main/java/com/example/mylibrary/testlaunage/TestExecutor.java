@@ -2,8 +2,10 @@ package com.example.mylibrary.testlaunage;
 
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestExecutor {
     public static void main(String[] args) {
@@ -53,13 +55,36 @@ public class TestExecutor {
 //        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 3,
 //                0L, TimeUnit.MILLISECONDS,
 //                new LinkedBlockingQueue<Runnable>(1));
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 3,
+//        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 2,
+//                0L, TimeUnit.MILLISECONDS,
+//                new LinkedBlockingQueue<Runnable>(1)); // 这里 用无界 MAX_VALUE，或者大于 2的 比如128是一样的。队列满不了
+
+        //1.实现一个自己的线程池工厂
+        ThreadFactory factory = new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                //创建一个线程
+                Thread t = new Thread(r);
+                t.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                    @Override
+                    public void uncaughtException(Thread t, Throwable e) {
+                        System.out.println("线程工厂设置的exceptionHandler" + e.getMessage());
+                    }
+                });
+                return t;
+            }
+        };
+//        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 2,
+//                0L, TimeUnit.MILLISECONDS,
+//                new LinkedBlockingQueue<Runnable>(1),factory);
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 2,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(3)); // 这里 用无界 MAX_VALUE，或者大于 2的 比如128是一样的。队列满不了
+                new LinkedBlockingQueue<Runnable>(1),new DefaultThreadFactory(Thread.NORM_PRIORITY,"xxx"));
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
+
                 System.out.println("1 " + Thread.currentThread() + " start time = " + (new Date().toString()));
                 try {
                     Thread.sleep(5 * 1000);
@@ -84,6 +109,7 @@ public class TestExecutor {
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                int i=1/0;
                 System.out.println("3 " + Thread.currentThread() + " finish time = " + (new Date().toString()));
 
             }
@@ -94,7 +120,42 @@ public class TestExecutor {
                 System.out.println("4 " + Thread.currentThread() + " finish time = " + (new Date().toString()));
             }
         });
-
+//        try {
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         executor.shutdown();
+    }
+
+    private static class DefaultThreadFactory implements ThreadFactory {
+
+        private static final AtomicInteger poolNumber = new AtomicInteger(1);
+
+        private final ThreadGroup group;
+        private final AtomicInteger threadNumber = new AtomicInteger(1);
+        private final String namePrefix;
+        private final int threadPriority;
+
+        DefaultThreadFactory(int threadPriority, String threadNamePrefix) {
+            this.threadPriority = threadPriority;
+            group = Thread.currentThread().getThreadGroup();
+            namePrefix = threadNamePrefix + poolNumber.getAndIncrement() + "-thread-";
+        }
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0);
+            t.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                @Override
+                public void uncaughtException(Thread t, Throwable e) {
+                    System.err.println("uncaughtException evan");
+                }
+            });
+            if (t.isDaemon()) t.setDaemon(false);
+            t.setPriority(threadPriority);
+            return t;
+        }
     }
 }
