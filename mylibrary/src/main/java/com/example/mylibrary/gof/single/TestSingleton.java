@@ -39,6 +39,26 @@ public class TestSingleton {
             e.printStackTrace();
         }
 
+        float a = 13930.7f;
+        float aa = a*0.1401f;
+        float aaaa = aa/241387.8f*100;
+        System.out.println("aaaa = "+ aaaa);
+
+        float b = 36880.1f;
+        float bb = b*0.0101f;
+        float bbbb = bb/610395.8f*100;
+        System.out.println("bbbb = "+ bbbb);
+
+        float c = 62201.3f;
+        float cc = c*0.0401f;
+        float ccc = cc/1029149.8f*100;
+        System.out.println("ccc = "+ ccc);
+
+        float d = 23388.1f;
+        float dd = d*0.038f;
+        float ddd = dd/329694.3f*100;
+        System.out.println("ddd = "+ ddd);
+
         executor.shutdown();
     }
 }

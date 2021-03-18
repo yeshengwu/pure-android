@@ -13,6 +13,11 @@ public class TestStackToList {
          * 1     2    3    4
          * +(1)  +(2) +(3) +(6)
          * -(4)  -(5)      -(7)
+         *
+         * 说明： +(1)  +(2) +(3) 表示 将 数字 1 2 3 进入队列，
+         * -(4) 表示 将 数字 1 出队列，
+         * -(5) 表示 将 数字 2 出队列，
+         * +(6) 表示 将 数字 4 进入队列，
          */
 
         TestStackToList list = new TestStackToList();

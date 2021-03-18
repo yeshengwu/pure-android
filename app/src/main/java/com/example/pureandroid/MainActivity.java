@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -432,6 +433,9 @@ public class MainActivity extends Activity {
 //        handlerB.sendMessage(messageA);
         handlerA.sendMessage(messageA);
         handlerB.sendMessage(messageB);
+
+        // GC 监控 高课：内存优化（下）
+        Debug.getGlobalGcInvocationCount();
     }
 
     private static final int MSG_1 = 1;

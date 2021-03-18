@@ -223,6 +223,8 @@ public class TestEntry {
         int middle = left + (right - left) / 2;;
         System.out.println("middle = "+ middle);
 
+//        testThrowOomException();
+
         System.out.println("findX = "+ findX());
 
         String str1=new String("Hello World");
@@ -231,6 +233,10 @@ public class TestEntry {
         String str4="Hello World";
         System.out.println("str1 == str2 "+ (str1 == str2)+ " equals "+(str1.equals(str2)));
         System.out.println("str3 == str4 "+ (str3 == str4)+ " equals "+(str3.equals(str4)));
+    }
+
+    private static void testThrowOomException() throws OutOfMemoryError {
+        throw new OutOfMemoryError("evan add OutOfMemoryError");
     }
 
     private static int findX() {

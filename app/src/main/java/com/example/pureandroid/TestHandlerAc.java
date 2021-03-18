@@ -4,7 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
+import android.view.Choreographer;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -26,8 +31,33 @@ public class TestHandlerAc extends Activity {
         super.onCreate(savedInstanceState);
 
         TextView textView = new TextView(this);
-        textView.setText("testHandler");
+        textView.setLayoutParams(new ViewGroup.LayoutParams(200,400));
+        textView.setText("testHandler. can click me");
+        textView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         setContentView(textView);
+        // onTouch和onTouchEvent以及onClick的顺序
+        // https://blog.csdn.net/jim1451/article/details/93095828
+        /**
+         * 1 onTouchListener的onTouch方法优先级比onTouchEvent高，会先触发。
+         *
+         * 2 假如onTouch方法返回false会接着触发onTouchEvent，反之onTouchEvent方法不会被调用。
+         *
+         * 3 内置诸如click事件的实现等等都基于onTouchEvent，假如onTouch返回true，这些事件将不会被触发。
+         */
+        textView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+//                Log.e(TAG,"onTouch. return false");
+                Log.e(TAG,"onTouch. return true");
+                return true;
+            }
+        });
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG,"onClick");
+            }
+        });
 
 //        mHandler = new Handler() {
 //            @Override
@@ -43,6 +73,19 @@ public class TestHandlerAc extends Activity {
         mHandler.sendMessageDelayed(message, 10 * 1000);
         // android.view.WindowManager$BadTokenException: Unable to add window -- token null is not valid; is your activity running?
         // PopupWindow
+
+        Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
+            @Override
+            public void doFrame(long frameTimeNanos) {
+                Log.e(TAG,"doFrame. SystemClock.uptimeMillis = " + SystemClock.uptimeMillis()); //is counted in milliseconds since the system was booted and stops when the system enters deep sleep
+                Log.e(TAG,"doFrame. SystemClock.elapsedRealtime = " + SystemClock.elapsedRealtime()); //the time since the system was booted, and include deep sleep
+                Log.e(TAG,"doFrame. System.currentTimeMillis = " + System.currentTimeMillis());
+                Log.e(TAG,"doFrame. frameTimeNanos = " + frameTimeNanos);
+
+                // 需要循环调用一下。
+//                Choreographer.getInstance().postFrameCallback(this);
+            }
+        });
     }
 
     @Override

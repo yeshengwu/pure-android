@@ -81,6 +81,14 @@ public class TestExecutor {
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>(1),new DefaultThreadFactory(Thread.NORM_PRIORITY,"xxx"));
 
+      //  如果 keepAliveTime = 0， allowCoreThreadTimeOut true 会抛异常
+        // java.lang.IllegalArgumentException: Core threads must have nonzero keep alive times
+        // 详情见 allowCoreThreadTimeOut 内部实现。
+//        executor.allowCoreThreadTimeOut(true);
+
+        // 问题2；keepAliveTime=0 表示的是 非核心 线程空闲退出。
+        // https://blog.csdn.net/xuhangsong/article/details/89474989
+
         executor.execute(new Runnable() {
             @Override
             public void run() {

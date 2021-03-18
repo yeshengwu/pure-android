@@ -30,4 +30,12 @@ public class TempClass {
         return Objects.hash(name, age);
     }
 
+
+    /**
+     *  jni 通过 javah 生成头文件
+     * @param a
+     * @return
+     */
+    public native boolean testJniMethod(String a);
+
 }
