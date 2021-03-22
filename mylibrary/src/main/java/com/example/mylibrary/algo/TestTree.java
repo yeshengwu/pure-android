@@ -375,6 +375,7 @@ public class TestTree {
         depth++;
         dfs(root.right, depth);
         dfs(root.left, depth);
+        // 这里 顺序 先 root.right，如果他们换个顺序就成了 左视图了
     }
 
     /**

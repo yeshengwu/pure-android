@@ -32,5 +32,27 @@ public class ThreadLocalTest {
 
     public static void main(String[] args) {
         ThreadLocalTest.startTest();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("evan a-thread: " + Thread.currentThread().getName() + " 的 value 值：" + ThreadId.get());
+            }
+        }, "a-thread").start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("evan b-thread: " + Thread.currentThread().getName() + " 的 value 值：" + ThreadId.get());
+            }
+        }, "b-thread").start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("evan c-thread: " + Thread.currentThread().getName() + " 的 value 值：" + ThreadId.get());
+            }
+        }, "c-thread").start();
+
     }
 }
