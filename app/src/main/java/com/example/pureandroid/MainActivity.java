@@ -1,6 +1,5 @@
 package com.example.pureandroid;
 
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -36,6 +35,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -109,7 +110,7 @@ public class MainActivity extends Activity {
         };
         AppCompatActivity compatActivity = new AppCompatActivity();
         // ITestC 是 c 模块
-        ITestC testC = new ITestC(){
+        ITestC testC = new ITestC() {
             @Override
             public void process(String args) {
 
@@ -280,21 +281,21 @@ public class MainActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                AsyncTask<String,Integer,String> asyncTask = new AsyncTask<String, Integer, String>() {
+                AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>() {
                     @Override
                     protected void onPreExecute() {
-                        Log.e("evan","asyncTask onPreExecute. isMainUI = "+(Looper.myLooper() == Looper.getMainLooper()));
+                        Log.e("evan", "asyncTask onPreExecute. isMainUI = " + (Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
                     protected String doInBackground(String... strings) {
-                        Log.e("evan","asyncTask doInBackground isMainUI = "+(Looper.myLooper() == Looper.getMainLooper()));
+                        Log.e("evan", "asyncTask doInBackground isMainUI = " + (Looper.myLooper() == Looper.getMainLooper()));
                         return "result";
                     }
 
                     @Override
                     protected void onPostExecute(String s) {
-                        Log.e("evan","asyncTask onPostExecute isMainUI = "+(Looper.myLooper() == Looper.getMainLooper()));
+                        Log.e("evan", "asyncTask onPostExecute isMainUI = " + (Looper.myLooper() == Looper.getMainLooper()));
                     }
                 };
                 asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -331,7 +332,7 @@ public class MainActivity extends Activity {
             @Override
             public boolean handleMessage(Message msg) {
                 // true false 决定要不要继续下发给 Handler 子类 handleMessage(),看上面代码片段消息代码A。
-                Log.e("evan","IN Handler Callback");
+                Log.e("evan", "IN Handler Callback");
                 return true;
             }
         });
@@ -363,7 +364,7 @@ public class MainActivity extends Activity {
         // Handler 处理分发消息代码 end
 
         // sThreadLocal 测试。不同线程看道的视图是不同的
-       // 2021-02-25 12:06:10.169 19526-19526/com.example.pureandroid E/evan: main sThreadLocal get = is initialValue
+        // 2021-02-25 12:06:10.169 19526-19526/com.example.pureandroid E/evan: main sThreadLocal get = is initialValue
         //2021-02-25 12:06:10.169 19526-19526/com.example.pureandroid E/evan: main sThreadLocal2 get = 10086
         //2021-02-25 12:06:10.169 19526-19526/com.example.pureandroid E/evan: main set value. sThreadLocal get = main set value
         //2021-02-25 12:06:10.169 19526-19526/com.example.pureandroid E/evan: main set value. sThreadLocal2 get = 110
@@ -371,36 +372,36 @@ public class MainActivity extends Activity {
         //2021-02-25 12:06:10.170 19526-19561/com.example.pureandroid E/evan: IN thread sThreadLocal2 get = 10086
         //2021-02-25 12:06:10.170 19526-19561/com.example.pureandroid E/evan: IN thread set value. sThreadLocal get = thread set value
         //2021-02-25 12:06:10.171 19526-19561/com.example.pureandroid E/evan: IN thread set value. sThreadLocal2 get = 119
-        final ThreadLocal<String> sThreadLocal = new ThreadLocal<String>(){
+        final ThreadLocal<String> sThreadLocal = new ThreadLocal<String>() {
             @Nullable
             @Override
             protected String initialValue() {
                 return "is initialValue";
             }
         };
-        final ThreadLocal<Integer> sThreadLocal2 = new ThreadLocal<Integer>(){
+        final ThreadLocal<Integer> sThreadLocal2 = new ThreadLocal<Integer>() {
             @Nullable
             @Override
             protected Integer initialValue() {
                 return 10086;
             }
         };
-        Log.e("evan","main sThreadLocal get = "+sThreadLocal.get());
-        Log.e("evan","main sThreadLocal2 get = "+sThreadLocal2.get());
+        Log.e("evan", "main sThreadLocal get = " + sThreadLocal.get());
+        Log.e("evan", "main sThreadLocal2 get = " + sThreadLocal2.get());
         sThreadLocal.set("main set value");
         sThreadLocal2.set(110);
-        Log.e("evan","main set value. sThreadLocal get = "+sThreadLocal.get());
-        Log.e("evan","main set value. sThreadLocal2 get = "+sThreadLocal2.get());
+        Log.e("evan", "main set value. sThreadLocal get = " + sThreadLocal.get());
+        Log.e("evan", "main set value. sThreadLocal2 get = " + sThreadLocal2.get());
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.e("evan","IN thread sThreadLocal get = "+sThreadLocal.get());
-                Log.e("evan","IN thread sThreadLocal2 get = "+sThreadLocal2.get());
+                Log.e("evan", "IN thread sThreadLocal get = " + sThreadLocal.get());
+                Log.e("evan", "IN thread sThreadLocal2 get = " + sThreadLocal2.get());
                 sThreadLocal.set("thread set value");
                 sThreadLocal2.set(119);
-                Log.e("evan","IN thread set value. sThreadLocal get = "+sThreadLocal.get());
-                Log.e("evan","IN thread set value. sThreadLocal2 get = "+sThreadLocal2.get());
+                Log.e("evan", "IN thread set value. sThreadLocal get = " + sThreadLocal.get());
+                Log.e("evan", "IN thread set value. sThreadLocal2 get = " + sThreadLocal2.get());
             }
         }).start();
 
@@ -410,17 +411,17 @@ public class MainActivity extends Activity {
         Message messageB = Message.obtain();
         messageB.what = 2;
 
-        Handler handlerA = new Handler(){
+        Handler handlerA = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                Log.e("evan", "In handlerA handleMessage. msg = "+msg);
+                Log.e("evan", "In handlerA handleMessage. msg = " + msg);
             }
         };
 
-        Handler handlerB = new Handler(){
+        Handler handlerB = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                Log.e("evan", "In handlerB handleMessage. msg = "+msg);
+                Log.e("evan", "In handlerB handleMessage. msg = " + msg);
             }
         };
 
@@ -436,9 +437,95 @@ public class MainActivity extends Activity {
 
         // GC 监控 高课：内存优化（下）
         Debug.getGlobalGcInvocationCount();
+
+        lockA = new ReentrantLock();
+        lockB = new ReentrantLock();
+
+//        new Thread(new RunnableA(lockA, lockB),"threadTestA").start();
+//        new Thread(new RunnableB(lockA, lockB),"threadTestB").start();
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                synchronized (o1) {
+//                    System.out.println("线程1锁o1");
+//                    try {
+//                        Thread.sleep(1000);//让当前线程睡眠，保证让另一线程得到o2，防止这个线程启动一下连续获得o1和o2两个对象的锁。
+//                        synchronized (o2) {
+//                            System.out.println("线程1锁o2");
+//                        }
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        },"xxA").start();
+
+        synchronized (o1) {
+            System.out.println("线程1锁o1");
+            try {
+                Thread.sleep(1000);//让当前线程睡眠，保证让另一线程得到o2，防止这个线程启动一下连续获得o1和o2两个对象的锁。
+                synchronized (o2) {
+                    System.out.println("线程1锁o2");
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (o2) {
+                    System.out.println("线程2锁o2");
+                    synchronized (o1) {
+                        System.out.println("线程2锁o1");
+                    }
+                }
+            }
+        },"xxB").start();
     }
 
+    static Object o1 = new Object();
+    static Object o2 = new Object();
+
+    class RunnableA implements Runnable {
+        private Lock lockA;
+        private Lock lockB;
+
+         RunnableA(Lock lockA, Lock lockB) {
+            this.lockA = lockA;
+            this.lockB = lockB;
+            this.lockA.lock();
+        }
+
+        @Override
+        public void run() {
+            this.lockB.lock();
+        }
+    }
+
+    class RunnableB implements Runnable {
+        private Lock lockA;
+        private Lock lockB;
+
+        RunnableB(Lock lockA, Lock lockB) {
+            this.lockA = lockA;
+            this.lockB = lockB;
+            this.lockB.lock();
+        }
+
+        @Override
+        public void run() {
+            this.lockA.lock();
+        }
+    }
+
+    private Lock lockA;
+    private Lock lockB;
+
     private static final int MSG_1 = 1;
+
     private static class LocalHandler extends Handler {
         WeakReference<MainActivity> weakReference;
 
@@ -447,7 +534,7 @@ public class MainActivity extends Activity {
             weakReference = new WeakReference<>(activity);
         }
 
-        LocalHandler(MainActivity activity,Callback callback) {
+        LocalHandler(MainActivity activity, Callback callback) {
             super(callback);
             weakReference = new WeakReference<>(activity);
         }
@@ -456,13 +543,13 @@ public class MainActivity extends Activity {
         public void handleMessage(Message msg) {
             MainActivity activity = weakReference.get();
             if (activity == null) {
-                Log.e("evan","handleMessage activity = null. return");
+                Log.e("evan", "handleMessage activity = null. return");
                 return;
             }
             switch (msg.what) {
                 case MSG_1:
-                    Log.e("evan","handleMessage = " + MSG_1);
-                break;
+                    Log.e("evan", "handleMessage = " + MSG_1);
+                    break;
                 default:
                     break;
             }

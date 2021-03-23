@@ -35,6 +35,12 @@ public class TestTree2 {
 
         System.out.println(testTree.lowestCommonAncestor(root, node2, node8));
         System.out.println(testTree.lowestCommonAncestor_2(root, node2, node4));
+
+        System.out.println("before insert:" + TestTree.PrintFromTopToBottom(root));
+        TreeNode nodeInsert = new TreeNode(1);
+//        TreeNode insertResult = testTree.insertIntoBST(root, nodeInsert);
+        TreeNode insertResult = testTree.insertIntoBSTEvan_2(root, nodeInsert);
+        System.out.println("insertResult:" + TestTree.PrintFromTopToBottom(insertResult));
     }
 
 
@@ -80,6 +86,66 @@ public class TestTree2 {
             }
         }
         return ancestor;
+    }
+
+    /**
+     * futu2 interview
+     *
+     * @param root
+     * @param p
+     * @return
+     */
+    public static TreeNode insertIntoBSTEvan(TreeNode root, TreeNode p) {
+        // my wrong
+        if (root == null) {
+            return null;
+        }
+        if (p.val > root.val) {
+            // 右边插
+            insertIntoBSTEvan(root.right, p);
+            TreeNode temp = root;
+            root.right = p;
+            p.right = temp;
+        } else {
+            // 左边插
+            insertIntoBSTEvan(root.left, p);
+            TreeNode temp = root;
+            root.left = p;
+            p.left = temp;
+        }
+        return root;
+    }
+
+    public static TreeNode insertIntoBSTEvan_2(TreeNode root, TreeNode p) {
+        if (root == null) {
+            return new TreeNode(p.val);
+        }
+        if (p.val > root.val) {
+            // 右边插
+            TreeNode temp = insertIntoBSTEvan_2(root.right, p);
+            root.right = p;
+            p.right = temp;
+//            root.right = temp;
+        } else {
+            // 左边插
+            TreeNode temp = insertIntoBSTEvan_2(root.left, p);
+            root.left = p;
+            p.left = temp;
+//            root.left = temp;
+        }
+        return root;
+    }
+
+    public static TreeNode insertIntoBST(TreeNode root, TreeNode p) {
+        if (root == null) {
+            return new TreeNode(p.val);
+        }
+        if (p.val > root.val) { // 右边插
+            root.right = insertIntoBST(root.right, p);
+        } else { // 左边插
+            root.left = insertIntoBST(root.left, p);
+        }
+        return root;
     }
 
     /**
