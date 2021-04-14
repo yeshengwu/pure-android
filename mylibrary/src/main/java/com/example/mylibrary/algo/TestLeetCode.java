@@ -30,7 +30,7 @@ public class TestLeetCode {
 //        int minInArray = TestLeetCode.minArray_2(a);
 //        System.out.println("minInArray = " + minInArray);
 //        int[] twoSumTables = TestLeetCode.twoSum_1(a,6);
-        int[] twoSumTables = TestLeetCode.twoSum_2(a, 0);
+        int[] twoSumTables = TestLeetCode.twoSum_2(a, 5);
         System.out.println("twoSum = " + Arrays.toString(twoSumTables));
 
 //        int[] inter_1 = {1, 6, 8};
@@ -182,6 +182,10 @@ public class TestLeetCode {
      * 万事开头难的 leetcode 第一题，
      * target -target hashMap 解法
      * https://leetcode-cn.com/problems/two-sum/
+     *
+     * evan通俗解释： 找剩下部分，就像找女朋友。
+     * 有个女朋友池，如果张三来了，看看女朋友池子里有没有符合他要求的女朋友，有就配对了，没有就把自己放入池子等待
+     * 别人来配对他。
      *
      * @param nums
      * @param target
