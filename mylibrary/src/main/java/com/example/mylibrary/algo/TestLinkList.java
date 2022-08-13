@@ -3,7 +3,6 @@ package com.example.mylibrary.algo;
 /**
  * 自己实现测试手写。技巧方法：
  * 一题多解，来加强理解：比如反转链表方法： 递归，虚拟节点头插法，当前指针加上个指针法。
- *
  */
 public class TestLinkList {
 
@@ -20,21 +19,24 @@ public class TestLinkList {
 //        node4.next = node5;
 
         int lastK = 2;
-        ListNode theLastKNode = linkList.findTheLastKNode(node,lastK);
-        System.out.println("lastK = "+lastK+" theLastKNode = "+theLastKNode);
+        ListNode theLastKNode = linkList.findTheLastKNode(node, lastK);
+        System.out.println("lastK = " + lastK + " find theLastKNode = " + theLastKNode);
 
         ListNode head = null;
-        head = linkList.deleteLastKth(node,lastK);
-        System.out.println("lastK = "+lastK+" deleteLastKth = "+head);
 
-//        head = linkList.ReverseListEvan(node);
+        head = linkList.ReverseListEvan(node);
 //        head = linkList.ReverseListRecursiveEvan(node);
-//        System.out.println("ReverseList = " + head);
+        System.out.println("ReverseList = " + head);
 
+        head = linkList.ReverseListRecursiveEvan(head);
+        System.out.println("ReverseList reverse = " + head);
+
+        head = linkList.deleteLastKth(node, lastK);
+        System.out.println("deleteLastKth. lastK = " + lastK + " result list  = " + head);
     }
 
     // 删除倒数第K个结点
-    public  ListNode deleteLastKth(ListNode head, int k) {
+    public ListNode deleteLastKth(ListNode head, int k) {
 
         //        if (head == null) return null;
 //        // 快慢指针
@@ -84,7 +86,7 @@ public class TestLinkList {
             head.next = dummyHead.next;
             dummyHead.next = head;
 
-            head = head.next; // 这样 head 头节点就断了，只剩 这次的 head.next值。下一次循环就直接退出了。
+            head = head.next; // 这样 head 头节点就断了，只剩 第一次循环赋值 head.next = dummyHead.next 它的值为 null.。下一次循环就直接退出了。
         }
         return dummyHead.next;*/
 
@@ -101,15 +103,15 @@ public class TestLinkList {
     }
 
     /**
-     *  1->2->3
-     *   递归示意图：
-     *      h                   h             h
-     *   |-----|            |-----|        |-----|
-     *   |  1   | -------> |  2   | -------> |  3   |
-     *   |  .(回归点)  | <------- |  .(回归点)  | <-------  | return reverse = 3  |
-     *   |  后续逻辑  |    |  后续逻辑  |
-     *
-     *   后续逻辑 是当前 h 入参 下一个节点往回指 head.next.next = head;  head.next = null;
+     * 1->2->3
+     * 递归示意图：
+     * h                   h             h
+     * |-----|            |-----|        |-----|
+     * |  1   | -------> |  2   | -------> |  3   |
+     * |  .(回归点)  | <------- |  .(回归点)  | <-------  | return reverse = 3  |
+     * |  后续逻辑  |    |  后续逻辑  |
+     * <p>
+     * 后续逻辑 是当前 h 入参 下一个节点往回指 head.next.next = head;  head.next = null;
      *
      * @param head
      * @return
@@ -141,8 +143,18 @@ public class TestLinkList {
 //            head.next = null;
 //            return  ReverseList(head);
 
+        // 递归理解技巧： 先用 1个节点来套用下面解法
+        // 再换成 2个节点 1->2->null 来测试
+        // 最终换成 3个节点 1->2->3-null 来测试。
+        // 配合阶乘理解： 递归开始做为起点，然后 往右上方画一个台阶，不断右上画台阶，再回归就明白递归的了。
+
+        // 具体下面递归时，可以把每层变量用 h1 n1, h2 n2 来表示，
+        // 比如 这里第一层时所有循环用的变量记录并画在纸上，比如 h1 就是 head,n1 就是 next节点，到了下一层就是 h2,n2,然后得到结果返回到h1层
+        // 继续执行第一层逻辑。这样方法内变量就不会乱掉。
+
+
         // right
-        if (head == null || head.next == null)
+        if (head == null || head.next == null)  // 这里这么写是为了处理只有1个节点的情况
             return head;
         ListNode next = head.next;
         head.next = null;
