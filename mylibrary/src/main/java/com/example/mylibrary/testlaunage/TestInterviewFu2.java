@@ -1,8 +1,5 @@
 package com.example.mylibrary.testlaunage;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class TestInterviewFu2 {
     int a = 0;
 
@@ -17,34 +14,30 @@ public class TestInterviewFu2 {
          * 3，面试过程中 自己要确认答案，不要面试官一质疑就开始怀疑自己的答案，这还是反应了知识点没有
          * 深刻理解，并加以解决实战中的问题。
          *
-         * 回到本题， 打印 序列1（大部分可能从1开始）：  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-         * 序列2（可能从2开始）： 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+         * 回到本题， 打印 序列1（大部分可能从1开始乱序交替打印）
+         * 序列2（可能从2开始乱序交替打印）
          * 那么 这个序列最小值会是几？ 为什么，说出出现这个结果的线程运行情况？
          * 答案：2这个情况： 线程1 开始运行 i++，i++不安全，i为刚好 ++时，2线程来运行则 为 i+1 为2.
-         * 最大值是几？ 20
+         * 最大值是几？小于 或者 等于 20 因为 i++ 不安全，所以可能不能一直累加到20
          */
-        ExecutorService executorService = Executors.newCachedThreadPool();
-
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                demo.func1();
-            }
-        });
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                demo.func1();
-            }
-        });
-
-        executorService.shutdown();
+        // 复现验证: 开1000个线程交替 i++. 打印结果显示：最后一个值 a = 9998 明显不能到 10000。
+        for (int i = 0;i<1000;i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    demo.func1();
+                }
+            }).start();
+        }
     }
 
-    public void func1() {
+    /**
+     * synchronized 加上同步就能妥妥的 a到 10000。
+     */
+    public  void func1() {
         for (int i = 0; i < 10; i++) {
             a++;
-            System.out.print(a + " ");
+            System.out.println(a + " ");
         }
     }
 

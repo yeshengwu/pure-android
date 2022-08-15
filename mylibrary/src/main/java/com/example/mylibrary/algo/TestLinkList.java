@@ -24,15 +24,27 @@ public class TestLinkList {
 
         ListNode head = null;
 
-        head = linkList.ReverseListEvan(node);
+        head = linkList.ReverseList(node);
 //        head = linkList.ReverseListRecursiveEvan(node);
         System.out.println("ReverseList = " + head);
 
-        head = linkList.ReverseListRecursiveEvan(head);
-        System.out.println("ReverseList reverse = " + head);
+//        head = linkList.ReverseListRecursiveEvan(head);
+//        System.out.println("ReverseList reverse = " + head);
+//
+//        head = linkList.deleteLastKth(node, lastK);
+//        System.out.println("deleteLastKth. lastK = " + lastK + " result list  = " + head);
 
-        head = linkList.deleteLastKth(node, lastK);
-        System.out.println("deleteLastKth. lastK = " + lastK + " result list  = " + head);
+        int k = 2;
+        System.out.println("init k= " + k);
+        while (k-->0) {
+            System.out.println("IN while k= " + k);
+        }
+
+        while (k>0) {
+            System.out.println("IN while k= " + k);
+            k--;
+        }
+
     }
 
     // 删除倒数第K个结点
@@ -159,8 +171,14 @@ public class TestLinkList {
         ListNode next = head.next;
         head.next = null;
         ListNode newHead = ReverseList(next);
+        System.out.println("newHead = " + newHead+ " param next = "+next);
         next.next = head;
         return newHead;
+
+        // log: 得出结论：先找到最末尾节点（单个节点），然后递归的归这个阶段 将末尾这个节点往回指形成链表
+        // newHead = ListNode{val=3, next=null} param next = ListNode{val=3, next=null}
+        //newHead = ListNode{val=3, next=ListNode{val=2, next=null}} param next = ListNode{val=2, next=null}
+        //ReverseList = ListNode{val=3, next=ListNode{val=2, next=ListNode{val=1, next=null}}}
     }
 
     public ListNode findTheLastKNode(ListNode head, int k) {
