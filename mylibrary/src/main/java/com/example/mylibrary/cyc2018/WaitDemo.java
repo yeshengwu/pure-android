@@ -14,16 +14,40 @@ public class WaitDemo {
             @Override
             public void run() {
                 try {
-                    System.out.println("sleep start.");
                     waitDemo.doWait();
-                    System.out.println("sleep end.");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
 
-        Thread.sleep(200);
+        // 验证 sleep 不会释放锁， sleep api 已经说了。 The thread does not lose ownership of any monitors
+        // log验证： sleep 先拿锁就顾自己，后面 doNotify 拿不到锁只能等着。
+        // sleep start.
+        //sleep end.
+        //notify start.
+        //notify end.
+/*        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                // sleep前先拿锁看后面会不会释放。
+                synchronized (locker) {
+
+                    try {
+                        System.out.println("sleep start.");
+                        Thread.sleep(1000);
+                        System.out.println("sleep end.");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }).start();*/
+
+        Thread.sleep(200);// 此行本身没有意义，是为了确保 wait() 先执行再执行 notify()
         waitDemo.doNotify();
     }
 
