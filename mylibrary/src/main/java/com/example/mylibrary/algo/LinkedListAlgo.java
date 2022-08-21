@@ -17,10 +17,10 @@ package com.example.mylibrary.algo;
 public class LinkedListAlgo {
 
     // 单链表反转  不带头节点操作反转
-    public static Node reverse(Node list) {
-        Node curr = list, pre = null;
+    public static ListNode reverse(ListNode list) {
+        ListNode curr = list, pre = null;
         while (curr != null) {
-            Node next = curr.next;  //防止链表断裂，先存next节点，下面curr好节点更新
+            ListNode next = curr.next;  //防止链表断裂，先存next节点，下面curr好节点更新
             curr.next = pre;
             pre = curr;
             curr = next;
@@ -58,22 +58,22 @@ public class LinkedListAlgo {
 //        return newList.next;
     }
 
-    public static Node ReverseList(Node head) {
+    public static ListNode ReverseList(ListNode head) {
         if (head == null || head.next == null)
             return head;
-        Node next = head.next;
+        ListNode next = head.next;
         head.next = null;
-        Node newHead = ReverseList(next);
+        ListNode newHead = ReverseList(next);
         next.next = head;
         return newHead;
     }
 
     // 检测环
-    public static boolean checkCircle(Node list) {
+    public static boolean checkCircle(ListNode list) {
         if (list == null) return false;
 
-        Node fast = list.next;
-        Node slow = list;
+        ListNode fast = list.next;
+        ListNode slow = list;
 
         while (fast != null && fast.next != null) {
             fast = fast.next.next;
@@ -86,24 +86,24 @@ public class LinkedListAlgo {
     }
 
     // 有序链表合并
-    public static Node mergeSortedLists(Node la, Node lb) {
+    public static ListNode mergeSortedLists(ListNode la, ListNode lb) {
         if (la == null) return lb;
         if (lb == null) return la;
 
-        Node p = la;
-        Node q = lb;
-        Node head;
-        if (p.data < q.data) {
+        ListNode p = la;
+        ListNode q = lb;
+        ListNode head;
+        if (p.val < q.val) {
             head = p;
             p = p.next;
         } else {
             head = q;
             q = q.next;
         }
-        Node r = head;
+        ListNode r = head;
 
         while (p != null && q != null) {
-            if (p.data < q.data) {
+            if (p.val < q.val) {
                 r.next = p;
                 p = p.next;
             } else {
@@ -140,13 +140,13 @@ public class LinkedListAlgo {
      * @param list2
      * @return
      */
-    public static Node MergeEvan(Node list1, Node list2) {
+    public static ListNode MergeEvan(ListNode list1, ListNode list2) {
 
-        if (list1 == null) return null;
-        if (list2 == null) return null;
+        if (list1 == null) return list2;
+        if (list2 == null) return list1;
 
-        Node head3 = null;
-        if (list1.data < list2.data) {
+        ListNode head3 = null;
+        if (list1.val < list2.val) {
             head3 = list1;
             list1 = list1.next;
         } else {
@@ -154,11 +154,11 @@ public class LinkedListAlgo {
             list2 = list2.next;
         }
 
-        Node cur = head3;
-        System.out.println(cur);
-        System.out.println(head3);
+        ListNode cur = head3;
+        System.out.println("cur = "+cur);
+        System.out.println("head3 = "+head3);
         while (list1 != null && list2 != null) {
-            if (list1.data < list2.data) {
+            if (list1.val < list2.val) {
                 cur.next = list1;
                 list1 = list1.next;
             } else {
@@ -185,11 +185,11 @@ public class LinkedListAlgo {
      * @param list2
      * @return
      */
-    public static Node Merge(Node list1, Node list2) {
-        Node head = new Node(-1, null);
-        Node cur = head;
+    public static ListNode Merge(ListNode list1, ListNode list2) {
+        ListNode head = new ListNode(-1, null);
+        ListNode cur = head;
         while (list1 != null && list2 != null) {
-            if (list1.data <= list2.data) {
+            if (list1.val <= list2.val) {
                 cur.next = list1;
                 list1 = list1.next;
             } else {
@@ -206,8 +206,8 @@ public class LinkedListAlgo {
     }
 
     // 删除倒数第K个结点
-    public static Node deleteLastKth(Node list, int k) {
-        Node fast = list;
+    public static ListNode deleteLastKth(ListNode list, int k) {
+        ListNode fast = list;
         int i = 1;
         while (fast != null && i < k) {
             fast = fast.next;
@@ -216,8 +216,8 @@ public class LinkedListAlgo {
 
         if (fast == null) return list;
 
-        Node slow = list;
-        Node prev = null;
+        ListNode slow = list;
+        ListNode prev = null;
         while (fast.next != null) {
             fast = fast.next;
             prev = slow;
@@ -233,11 +233,11 @@ public class LinkedListAlgo {
     }
 
     // 求中间结点
-    public static Node findMiddleNode(Node list) {
+    public static ListNode findMiddleNode(ListNode list) {
         if (list == null) return null;
 
-        Node fast = list;
-        Node slow = list;
+        ListNode fast = list;
+        ListNode slow = list;
 
         while (fast.next != null && fast.next.next != null) {
             fast = fast.next.next;
@@ -247,52 +247,30 @@ public class LinkedListAlgo {
         return slow;
     }
 
-    public static void printAll(Node list) {
-        Node p = list;
+    public static void printAll(ListNode list) {
+        ListNode p = list;
         while (p != null) {
-            System.out.print(p.data + " ");
+            System.out.print(p.val + " ");
             p = p.next;
         }
         System.out.println();
     }
 
-    public static Node createNode(int value) {
-        return new Node(value, null);
-    }
-
-    public static class Node {
-        private int data;
-        private Node next;
-
-        public Node(int data, Node next) {
-            this.data = data;
-            this.next = next;
-        }
-
-        public int getData() {
-            return data;
-        }
-
-        @Override
-        public String toString() {
-            return "Node{" +
-                    "data=" + data +
-                    ", next=" + next +
-                    '}';
-        }
+    public static ListNode createNode(int value) {
+        return new ListNode(value, null);
     }
 
     public static void main(String[] args) {
         LinkedListAlgo testInsert = new LinkedListAlgo();
 //        Node head =  LinkedListAlgo.createNode(-1);
 
-        Node node1 = LinkedListAlgo.createNode(1);
-        Node node2 = LinkedListAlgo.createNode(2);
-        Node node3 = LinkedListAlgo.createNode(3);
-        Node node4 = LinkedListAlgo.createNode(4);
-        Node node5 = LinkedListAlgo.createNode(5);
-        Node node6 = LinkedListAlgo.createNode(6);
-        Node node7 = LinkedListAlgo.createNode(7);
+        ListNode node1 = LinkedListAlgo.createNode(1);
+        ListNode node2 = LinkedListAlgo.createNode(2);
+        ListNode node3 = LinkedListAlgo.createNode(3);
+        ListNode node4 = LinkedListAlgo.createNode(4);
+        ListNode node5 = LinkedListAlgo.createNode(5);
+        ListNode node6 = LinkedListAlgo.createNode(6);
+        ListNode node7 = LinkedListAlgo.createNode(7);
 
 //        head.next = node1;
         node1.next = node3;
@@ -336,7 +314,7 @@ public class LinkedListAlgo {
          * 1 3
          * 2 4
          */
-        Node merged = LinkedListAlgo.MergeEvan(node1,node2);
+        ListNode merged = LinkedListAlgo.MergeEvan(node1,node2);
         LinkedListAlgo.printAll(merged);
 
 //        Node middleNode = LinkedListAlgo.findMiddleNode(node1);
@@ -345,7 +323,7 @@ public class LinkedListAlgo {
 
 //        Node reverseHead = LinkedListAlgo.reverse(node1);
 //        Node reverseHead = LinkedListAlgo.reverse(node1);
-        Node reverseHead = LinkedListAlgo.ReverseList(node1);
+        ListNode reverseHead = LinkedListAlgo.ReverseList(node1);
         LinkedListAlgo.printAll(reverseHead);
 
     }

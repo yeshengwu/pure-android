@@ -21,6 +21,7 @@ import android.os.RemoteException;
 import android.os.StatFs;
 import android.util.Log;
 import android.util.LruCache;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +74,21 @@ public class MainActivity extends Activity {
 
                 Intent intent4 = new Intent(MainActivity.this, TestHandlerAc.class);
                 startActivity(intent4);
+
+                SparseArray<String> stringSparseArray = new SparseArray<>();
+                stringSparseArray.put(1, "a");
+                stringSparseArray.put(3, "b");
+                Log.d("evan", "stringSparseArray put 1->a 3,b" + stringSparseArray);
+                stringSparseArray.put(1, "c");
+                Log.d("evan", "stringSparseArray put then 1->c" + stringSparseArray);
+
+                stringSparseArray.append(3, "d");
+                Log.d("evan", "stringSparseArray append then 3->d" + stringSparseArray);
+                stringSparseArray.append(3, "e");
+                Log.d("evan", "stringSparseArray append then 3->e" + stringSparseArray);
+
+                stringSparseArray.append(4, "f");
+                Log.d("evan", "stringSparseArray append  4->f" + stringSparseArray);
 
                 Log.e("evan", "this = " + this);
 

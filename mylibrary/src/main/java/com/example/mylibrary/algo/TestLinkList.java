@@ -6,15 +6,18 @@ package com.example.mylibrary.algo;
  */
 public class TestLinkList {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
         TestLinkList linkList = new TestLinkList();
-        TestLinkList.ListNode node = new TestLinkList.ListNode(1);
-        TestLinkList.ListNode node2 = new TestLinkList.ListNode(2);
-        TestLinkList.ListNode node3 = new TestLinkList.ListNode(3);
-        TestLinkList.ListNode node4 = new TestLinkList.ListNode(4);
-        TestLinkList.ListNode node5 = new TestLinkList.ListNode(5);
-        node.next = node2;
-        node2.next = node3;
+        ListNode node = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(3);
+        ListNode node4 = new ListNode(4);
+        ListNode node5 = new ListNode(5);
+        ListNode node6 = new ListNode(6);
+        ListNode node7 = new ListNode(7);
+        ListNode node8 = new ListNode(8);
+//        node.next = node2;
+//        node2.next = node3;
 //        node3.next = node4;
 //        node4.next = node5;
 
@@ -28,12 +31,12 @@ public class TestLinkList {
 //        head = linkList.ReverseListRecursiveEvan(node);
         System.out.println("ReverseList = " + head);
 
-//        head = linkList.ReverseListRecursiveEvan(head);
-//        System.out.println("ReverseList reverse = " + head);
-//
-//        head = linkList.deleteLastKth(node, lastK);
-//        System.out.println("deleteLastKth. lastK = " + lastK + " result list  = " + head);
+        head = linkList.ReverseListRecursiveEvan(head);
+        System.out.println("ReverseList reverse = " + head);
 
+//     head = linkList.deleteLastKth(node, lastK);
+//       System.out.println("deleteLastKth. lastK = " + lastK + " result list  = " + head);
+//
         int k = 2;
         System.out.println("init k= " + k);
         while (k-->0) {
@@ -45,6 +48,52 @@ public class TestLinkList {
             k--;
         }
 
+      /*  ListNode list1 = null;
+        ListNode list2;*/
+
+       /* ListNode list1;
+        list1 = node;
+        ListNode list2 = node2;
+//        // 1 3 5
+        node.next = node3;
+        node3.next = node5;
+        // 2 4 6
+        node2.next = node4;
+        node4.next = node6;*/
+
+        ListNode list1 = node;
+        ListNode node3Clone = (ListNode) node3.clone();
+        ListNode node4Clone = (ListNode) node4.clone();
+        ListNode node3Clone2 = (ListNode) node3.clone();
+        ListNode node3Clone3 = (ListNode) node3.clone();
+        ListNode node5Clone = (ListNode) node5.clone();
+        ListNode node6Clone = (ListNode) node6.clone();
+        ListNode list2 = node4Clone;
+       /* // 1 2 4
+        node.next = node2;
+        node2.next = node4;
+        // 1 3 4
+        ListNode node3Clone = (ListNode) node3.clone();
+        ListNode node4Clone = (ListNode) node4.clone();
+        node1Clone.next = node3Clone;
+        node3Clone.next = node4Clone;*/
+
+        // 1 2 3
+        node.next = node2;
+        node2.next = node3;
+        System.out.println("node1.hash = " + node.hashCode() + " clone1 = " + node.clone().hashCode() + " node1 clone again =" + node.clone().hashCode());
+        // 3 3 3
+
+        // 4 5 6
+        node4Clone.next = node5Clone;
+        node5Clone.next = node6Clone;
+
+        ListNode headMerge = MergeEvan2(list1, list2);
+        System.out.println("MergeEvan = " + headMerge);
+//        ListNode headMerge2 = LinkedListAlgo.mergeSortedLists(list1, list2);
+//        ListNode headMerge2 = LinkedListAlgo.Merge(list1, list2);
+//        ListNode headMerge2 = LinkedListAlgo.MergeEvan(list1, list2);
+//        System.out.println("MergeStandard = " + headMerge2);
     }
 
     // 删除倒数第K个结点
@@ -171,7 +220,7 @@ public class TestLinkList {
         ListNode next = head.next;
         head.next = null;
         ListNode newHead = ReverseList(next);
-        System.out.println("newHead = " + newHead+ " param next = "+next);
+        System.out.println("newHead = " + newHead + " param next = " + next);
         next.next = head;
         return newHead;
 
@@ -211,21 +260,66 @@ public class TestLinkList {
         return slow;
     }
 
-    public static class ListNode {
-        int val;
-        ListNode next = null;
+    /**
+     * 牛客网 提交代码发现有 16组testcase，想要通过,要考虑的场景case还是非常多的，不容易。
+     * 技巧：用这个 1 2 3 | 4 5 6 来挂断点看 head root head.next的值 data next的变化情况。
+     * <p>
+     * https://www.nowcoder.com/questionTerminal/d8b6b4358f774294a89de2a6ac4d9337
+     *
+     * @param list1
+     * @param list2
+     * @return
+     */
+    public static ListNode MergeEvan2(ListNode list1, ListNode list2) {
+        // my wrong: 通不过测试case： 1 2 3 | 3 4 5  and 1 2 3 | 3 3 3 and 1 2 3 | 4 5 6
+        /*if (list1 == null) return list2;
+        if (list2 == null) return list1;
 
-        ListNode(int val) {
-            this.val = val;
+        ListNode resultHead;
+        ListNode h1n1;
+        ListNode h2n1;
+        if (list1.val <= list2.val) {
+            resultHead = list1;
+        } else {
+            resultHead = list2;
         }
 
-        @Override
-        public String toString() {
-            return "ListNode{" +
-                    "val=" + val +
-                    ", next=" + next +
-                    '}';
+        while ((list1 != null) && (list2 != null)) {
+            if (list1.val <= list2.val) {
+                h1n1 = list1.next;
+                list1.next = list2;
+                list1 = h1n1;
+            } else {
+                h2n1 = list2.next;
+                list2.next = list1;
+                list2 = h2n1;
+            }
         }
+        return resultHead;*/
+
+        //新建一个头节点，用来存合并的链表。
+        ListNode head = new ListNode(-1);
+        head.next = null;
+        ListNode root = head;
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                head.next = list1;
+                head = list1;
+                list1 = list1.next;
+            } else {
+                head.next = list2;
+                head = list2;
+                list2 = list2.next;
+            }
+        }
+        //把未结束的链表连接到合并后的链表尾部
+        if (list1 != null) {
+            head.next = list1;
+        }
+        if (list2 != null) {
+            head.next = list2;
+        }
+        return root.next;
     }
 
 }
