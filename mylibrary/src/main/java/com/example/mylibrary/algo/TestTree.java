@@ -186,6 +186,8 @@ public class TestTree {
          */
         Integer[] nodeArray = {3, 9, 8, 1, 13, 7, 12, null, 2, 4, 5, null, null, 15, null
                 , null, null, null, null, null, null, null, 18}; // 18 前面 7个 null 是 2 4 5 15 下面的，像 2
+//        Integer[] nodeArray = {1,2,3,4,5,null,7,null,null,null,null,8,null};
+//        Integer[] nodeArray = {3,9,20,null,null,15,7};
         // 这个节点的兄弟下面不需要填充 null， 因为 2的兄弟都不在填个jj
         TreeNode root = TestTree.generateTreeNode(nodeArray);
         System.out.println("root = " + root);
@@ -215,8 +217,8 @@ public class TestTree {
 
         System.out.println("");
         System.out.println("PrintFromTopToBottom:");
-        System.out.println(PrintFromTopToBottom(root));
-//        System.out.println(PrintFromTopToBottom2(root));
+//        System.out.println(PrintFromTopToBottom(root));
+        System.out.println(levelOrder(root));
         System.out.println("");
         System.out.println("getRightView:");
         System.out.println(getRightSideView(root));
@@ -253,6 +255,50 @@ public class TestTree {
             }
         }
         return ret;
+
+        // my wrong:  int cnt = queue.size(); 这个没有导致没把当前层访问完。
+        // Queue<TreeNode> queue = new LinkedList<>();
+        //        ArrayList<Integer> ret = new ArrayList<>();
+        //        queue.add(root);
+        //        while (!queue.isEmpty()) {
+        //            TreeNode curNode = queue.poll();
+        //            if (curNode != null) {
+        //                ret.add(curNode.val);
+        //                queue.add(curNode.left);
+        //                queue.add(curNode.right);
+        //            }
+        //        }
+        //        return ret;
+    }
+
+    /**
+     * https://leetcode.cn/problems/binary-tree-level-order-traversal/comments/
+     * 层序遍历二叉树
+     *
+     * @param root
+     * @return
+     */
+    public static List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null)
+            return new ArrayList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int count = queue.size();
+            List<Integer> list = new ArrayList<Integer>();
+            while (count > 0) {
+                TreeNode node = queue.poll();
+                list.add(node.val);
+                if (node.left != null)
+                    queue.add(node.left);
+                if (node.right != null)
+                    queue.add(node.right);
+                count--;
+            }
+            res.add(list);
+        }
+        return res;
     }
 
     public static ArrayList<Integer> PrintFromTopToBottom2(TreeNode root) {
@@ -381,10 +427,11 @@ public class TestTree {
     /**
      * 226. 翻转二叉树
      * https://leetcode-cn.com/problems/invert-binary-tree/comments/
+     *
      * @param root
      * @return
      */
-    public static TreeNode invertTree(TreeNode root){
+    public static TreeNode invertTree(TreeNode root) {
         if (root == null) {
             return null;
         }
