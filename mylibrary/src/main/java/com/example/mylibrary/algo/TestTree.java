@@ -39,6 +39,7 @@ public class TestTree {
             index++;
             if (index >= len) return head;
             cur = nodeQueue.poll();
+            if (cur == null) continue;
             Integer left = nums[index];
             if (left != null) {
                 cur.left = new TreeNode(left);
@@ -170,7 +171,6 @@ public class TestTree {
          *      / \
          *     15  7
          */
-//        Integer[] nodeArray = [3,9,20,null,null,15,7];
 //        Integer[] nodeArray = {3, 9, 20, null, null, 15, 7};
 
         /**
@@ -184,13 +184,16 @@ public class TestTree {
          *             \
          *             18
          */
+        // 18 前面 7个 null 是 2 4 5 15 下面的，像 2这个节点的兄弟节点 它的下面不需要填充 null，如果再填充
+        // 2个 null 18前面就 9个 null 导致构造的树不对（验证：通过 BTreePrinter 或者 levelOrder 打印都可以验证）。
         Integer[] nodeArray = {3, 9, 8, 1, 13, 7, 12, null, 2, 4, 5, null, null, 15, null
-                , null, null, null, null, null, null, null, 18}; // 18 前面 7个 null 是 2 4 5 15 下面的，像 2
+                , null, null, null, null, null, null, null, 18};
 //        Integer[] nodeArray = {1,2,3,4,5,null,7,null,null,null,null,8,null};
 //        Integer[] nodeArray = {3,9,20,null,null,15,7};
-        // 这个节点的兄弟下面不需要填充 null， 因为 2的兄弟都不在填个jj
+
         TreeNode root = TestTree.generateTreeNode(nodeArray);
         System.out.println("root = " + root);
+        BTreePrinter.printNode(root);
 
         /*TreeNode root = new TreeNode(3);
         TreeNode node9 = new TreeNode(9);

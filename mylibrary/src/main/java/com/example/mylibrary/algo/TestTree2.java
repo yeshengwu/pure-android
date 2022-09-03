@@ -16,7 +16,8 @@ public class TestTree2 {
         // 二叉搜索树
         Integer[] nodeArray = {6, 2, 8, 0, 4, 7, 9, null, null, 3, 5};
         TreeNode root = TestTree.generateTreeNode(nodeArray);
-        System.out.println("root = " + root);
+        System.out.println("root = " + TestTree.PrintFromTopToBottom(root));
+        System.out.println("root levelOrder = " + TestTree.levelOrder(root));
 
         // Integer[] nodeArray = {6, 5, 12, 4, 8, 11, 13, null, null, 7, 9}; // 结果不是 二叉搜索树
         //  违反了 二叉搜索树性质：
@@ -24,25 +25,27 @@ public class TestTree2 {
         // 原因是 5 的 右节点 8 大于根节点6。 性质规定： 左子树上所有结点的值均小于它的根结点的值
         System.out.println("isValidBST = "+isValidBST(root));
 
-        TestTree2 testTree = new TestTree2();
         TreeNode node2 = TestTree.preOrderTraversalSearch(root,2);
-        System.out.println("node2:"+node2);
-        TreeNode node8 = TestTree.preOrderTraversalSearch(root,8);
-        System.out.println("node8:"+node8);
-        System.out.println("lowestCommonAncestor:");
+        System.out.println("node2 levelOrder = " + TestTree.levelOrder(node2));
         TreeNode node4 = TestTree.preOrderTraversalSearch(root,4);
-        System.out.println("node4:"+node4);
+        System.out.println("node4 levelOrder = " + TestTree.levelOrder(node4));
+        TreeNode node8 = TestTree.preOrderTraversalSearch(root,8);
+        System.out.println("node8 levelOrder = " + TestTree.levelOrder(node8));
 
-        System.out.println(testTree.lowestCommonAncestor(root, node2, node8));
-        System.out.println(testTree.lowestCommonAncestor_2(root, node2, node4));
+        TreeNode lowest8 = TestTree2.lowestCommonAncestor(root, node2, node8);
+        System.out.println("lowest levelOrder = " + TestTree.levelOrder(lowest8));
 
-        System.out.println("before insert:" + TestTree.PrintFromTopToBottom(root));
+        TreeNode lowest4 = TestTree2.lowestCommonAncestor_2(root, node2, node4);
+        System.out.println("lowest4 levelOrder = " + TestTree.levelOrder(lowest4));
+
+        System.out.println("before insert:" + TestTree.levelOrder(root));
+        BTreePrinter.printNode(root);
         TreeNode nodeInsert = new TreeNode(1);
-//        TreeNode insertResult = testTree.insertIntoBST(root, nodeInsert);
-        TreeNode insertResult = testTree.insertIntoBSTEvan_2(root, nodeInsert);
-        System.out.println("insertResult:" + TestTree.PrintFromTopToBottom(insertResult));
+//        TreeNode insertResult = TestTree2.insertIntoBST(root, nodeInsert);
+        TreeNode insertResult = TestTree2.insertIntoBST2(root, nodeInsert);
+        System.out.println("after insert:" + TestTree.levelOrder(insertResult));
+        BTreePrinter.printNode(insertResult);
     }
-
 
     public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         List<TreeNode> path_p = getPath(root, p);
@@ -145,6 +148,30 @@ public class TestTree2 {
         } else { // 左边插
             root.left = insertIntoBST(root.left, p);
         }
+        return root;
+    }
+
+    /**
+     *  evan 手写实现
+     *
+     * @param root
+     * @param p
+     * @return
+     */
+    public static TreeNode insertIntoBST2(TreeNode root, TreeNode p) {
+        if (root == null) {
+            return new TreeNode(p.val);
+        }
+
+        if (root.val < p.val) {
+            TreeNode inserted = insertIntoBST2(root.right,p); // 这里是关键，不要跟上面一样
+            // 简化成   root.right = insertIntoBST2(root.right, p); 就懵逼了。
+            root.right = inserted;
+        } else if (root.val > p.val) {
+            TreeNode inserted = insertIntoBST2(root.left,p);
+            root.left = inserted;
+        }
+
         return root;
     }
 
