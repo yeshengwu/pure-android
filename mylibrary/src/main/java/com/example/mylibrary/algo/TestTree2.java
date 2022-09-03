@@ -43,6 +43,10 @@ public class TestTree2 {
         TreeNode nodeInsert = new TreeNode(1);
 //        TreeNode insertResult = TestTree2.insertIntoBST(root, nodeInsert);
         TreeNode insertResult = TestTree2.insertIntoBST2(root, nodeInsert);
+        // 关键日志：
+        //IN right: inserted = 1 root = 0
+        //IN left: inserted = 0 root = 2
+        //IN left: inserted = 2 root = 6
         System.out.println("after insert:" + TestTree.levelOrder(insertResult));
         BTreePrinter.printNode(insertResult);
     }
@@ -165,10 +169,12 @@ public class TestTree2 {
 
         if (root.val < p.val) {
             TreeNode inserted = insertIntoBST2(root.right,p); // 这里是关键，不要跟上面一样
+            System.out.println("IN right: inserted = "+inserted.val+ " root = "+root.val);
             // 简化成   root.right = insertIntoBST2(root.right, p); 就懵逼了。
             root.right = inserted;
         } else if (root.val > p.val) {
             TreeNode inserted = insertIntoBST2(root.left,p);
+            System.out.println("IN left: inserted = "+inserted.val+ " root = "+root.val);
             root.left = inserted;
         }
 
