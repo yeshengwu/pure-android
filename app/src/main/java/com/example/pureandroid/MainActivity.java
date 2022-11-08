@@ -41,6 +41,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import kotlin.jvm.internal.Lambda;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
@@ -53,6 +54,21 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TextView textView = findViewById(R.id.test_textview);
+
+        Lambda<Integer> lambda = new Lambda<Integer>(1) {
+
+        };
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("evan", "v1");
+            }
+        });
+        textView.setOnClickListener(v -> {
+            Log.e("evan", "v2");
+        });
+
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -499,7 +515,7 @@ public class MainActivity extends Activity {
                     }
                 }
             }
-        },"xxB").start();
+        }, "xxB").start();
     }
 
     static Object o1 = new Object();
@@ -509,7 +525,7 @@ public class MainActivity extends Activity {
         private Lock lockA;
         private Lock lockB;
 
-         RunnableA(Lock lockA, Lock lockB) {
+        RunnableA(Lock lockA, Lock lockB) {
             this.lockA = lockA;
             this.lockB = lockB;
             this.lockA.lock();

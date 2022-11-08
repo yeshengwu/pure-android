@@ -12,7 +12,7 @@ import com.example.pureandroid.R
 
 /**
  * 学习价值：
- * 1，kotlin 反编译： 看 回调 lamda 等在 字节码里到底长什么样，就一清二楚了，而不是被 kotlin上层给封装蒙蔽眼睛
+ * 1，kotlin 反编译：默认反编译工具： jadx,有疑问再 d2j-dex2jar。 看 回调 lamda 等在 字节码里到底长什么样，就一清二楚了，而不是被 kotlin上层给封装蒙蔽眼睛
  */
 
 // Android - setVisibility() 失效，竟然是因为内存泄露
