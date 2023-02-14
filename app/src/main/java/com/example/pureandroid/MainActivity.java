@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         TextView textView = findViewById(R.id.test_textview);
 
+        // kotlin lamba： 是为 lamda函数表达式，内部 为 kotlin.jvm.functions.Function 函数接口，类定义： abstract class Lambda<out R>(override val arity: Int) : FunctionBase<R>, Serializable {}
         Lambda<Integer> lambda = new Lambda<Integer>(1) {
 
         };
@@ -65,8 +66,20 @@ public class MainActivity extends Activity {
                 Log.e("evan", "v1");
             }
         });
+
+        // java lamda 是为lambada表达式语法糖： 反编译得知：就是普通匿名内部类而已。
+        // public final /* synthetic */ class $$Lambda$MainActivity$tEeykioWhlxSKQhqbtH6QmPUfKQ implements View.OnClickListener {
+        //    @Override // android.view.View.OnClickListener
+        //      public final void onClick(View view) {
+        //          Log.e("evan", "lamda v2");
+        //      }
+        // }
         textView.setOnClickListener(v -> {
-            Log.e("evan", "v2");
+            Log.e("evan", "lamda v2");
+        });
+
+        textView.setOnClickListener(v -> {
+            Log.e("evan", "lamda v3");
         });
 
         textView.setOnClickListener(new View.OnClickListener() {

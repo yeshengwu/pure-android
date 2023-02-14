@@ -16,8 +16,8 @@ public class TestLinkList {
         ListNode node6 = new ListNode(6);
         ListNode node7 = new ListNode(7);
         ListNode node8 = new ListNode(8);
-//        node.next = node2;
-//        node2.next = node3;
+        node.next = node2;
+        node2.next = node3;
 //        node3.next = node4;
 //        node4.next = node5;
 
@@ -150,6 +150,16 @@ public class TestLinkList {
             head = head.next; // 这样 head 头节点就断了，只剩 第一次循环赋值 head.next = dummyHead.next 它的值为 null.。下一次循环就直接退出了。
         }
         return dummyHead.next;*/
+
+        // 错误做法2： 死循环
+        // ListNode dummyHead = new ListNode(-1);
+        //        while ( head.next!= null) { // 这里为啥不是 head != null
+        //            ListNode next = head.next;
+        //            dummyHead.next = next;
+        //            next.next = head;
+        //            head = next;
+        //        }
+        //        return dummyHead.next;
 
         // 正解： 先保留 next 节点，不要断链。
         while (head != null) {
