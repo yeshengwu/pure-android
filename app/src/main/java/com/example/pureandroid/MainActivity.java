@@ -29,9 +29,12 @@ import android.widget.Toast;
 import com.example.mylibrary.TestB;
 import com.example.mysecondlib.ITestC;
 
+import java.io.DataInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,6 +62,25 @@ public class MainActivity extends Activity {
         Lambda<Integer> lambda = new Lambda<Integer>(1) {
 
         };
+
+        //  {@link TestLang testAndroidSocket}
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ServerSocket mServerSocket = new ServerSocket(9999);
+                    byte[] buffer = new byte[1024];
+                    while (true) {
+                        Socket mClientSocket = mServerSocket.accept();
+                        DataInputStream inputStream = new DataInputStream(mClientSocket.getInputStream());
+                        int len = inputStream.read(buffer);
+                        Log.e(TAG, "ServerSocket read = " + new String(buffer, 0, len, "UTF-8"));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override

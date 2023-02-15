@@ -41,6 +41,15 @@ public class TestLiveBus extends Fragment {
             }
         });
 
+        // todo 待解决待问题： 发送和注册接口 范型参数问题，为何发送和注册不能用同一个接口？
+//        LiveDataBus.Observable<String> observable = dataBus.with("evvv");
+//        observable.observe(this, new Observer<String>() {
+//            @Override
+//            public void onChanged(String s) {
+//
+//            }
+//        });
+
     }
 
     public void send(String data) {
