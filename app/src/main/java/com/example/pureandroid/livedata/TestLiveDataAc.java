@@ -6,8 +6,12 @@ import android.view.View;
 
 import com.example.pureandroid.R;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleEventObserver;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -45,6 +49,12 @@ public class TestLiveDataAc extends FragmentActivity {
             @Override
             public void onChanged(Integer integer) {
                 Log.e("evan","onChanged integer = "+integer);
+            }
+        });
+        this.getLifecycle().addObserver(new LifecycleEventObserver() {
+            @Override
+            public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
+                Log.e("evan","onStateChanged event = "+event);
             }
         });
     }
