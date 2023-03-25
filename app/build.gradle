@@ -75,6 +75,8 @@ dependencies {
     debugImplementation rootProject.ext.DependenciesName.leakcanary_fragment
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 }
 repositories {
     mavenCentral()

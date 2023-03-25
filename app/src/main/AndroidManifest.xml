@@ -56,6 +56,10 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".memleak.MyActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".HookCloseGuardActivity"
             android:screenOrientation="portrait" />
 

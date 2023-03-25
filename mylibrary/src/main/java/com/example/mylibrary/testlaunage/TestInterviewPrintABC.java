@@ -11,6 +11,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * c 线程 打印C
  * 3个线程循环打印10次
  * 结果： ABC ABC ABC ....
+ * https://juejin.cn/post/7149006608209543176 三个线程顺序打印ABC?我有十二种做法！
+ * ----evan： 这十二种做法他妈牛逼了，还有图展示非常清晰，把并发基本都搞了一遍。可以关注这个博主
  */
 public class TestInterviewPrintABC {
     final Lock lock = new ReentrantLock();
@@ -25,12 +27,15 @@ public class TestInterviewPrintABC {
         new Thread(new TestInterviewPrintABC.RunB(example.lock, example.conditionA, example.conditionB)).start();
         new Thread(new TestInterviewPrintABC.RunC(example.lock, example.conditionB, example.conditionC)).start();
 
-        // 先触发C signal 开启A的打印。
+        // 先触发 conditionC signal 唤醒A线程开启A的打印。
         example.lock.lock();
+        System.out.println("main lock after");
         try {
+            System.out.println("main conditionC signal");
             example.conditionC.signal();
         } finally {
             example.lock.unlock();
+            System.out.println("main unlock");
         }
 
     }
@@ -54,10 +59,12 @@ public class TestInterviewPrintABC {
         @Override
         public void run() {
             lock.lock();
+            System.out.println("A lock after");
             try {
 
                 for (int i = 0; i < 10; i++) {
                     try {
+                        System.out.println("A await");
                         conditionC.await();
 
                         System.out.println("A");
@@ -70,6 +77,7 @@ public class TestInterviewPrintABC {
 
             } finally {
                 lock.unlock();
+                System.out.println("A unlock");
             }
 
         }
@@ -89,10 +97,12 @@ public class TestInterviewPrintABC {
         @Override
         public void run() {
             lock.lock();
+            System.out.println("B lock after");
             try {
 
                 for (int i = 0; i < 10; i++) {
                     try {
+                        System.out.println("B await");
                         conditionA.await();
 
                         System.out.println("B");
@@ -106,6 +116,7 @@ public class TestInterviewPrintABC {
 
             } finally {
                 lock.unlock();
+                System.out.println("B unlock");
             }
 
         }
@@ -125,10 +136,12 @@ public class TestInterviewPrintABC {
         @Override
         public void run() {
             lock.lock();
+            System.out.println("C lock after");
             try {
 
                 for (int i = 0; i < 10; i++) {
                     try {
+                        System.out.println("C await");
                         conditionB.await();
 
                         System.out.println("C");
@@ -141,8 +154,8 @@ public class TestInterviewPrintABC {
 
             } finally {
                 lock.unlock();
+                System.out.println("C unlock");
             }
-
 
         }
     }
