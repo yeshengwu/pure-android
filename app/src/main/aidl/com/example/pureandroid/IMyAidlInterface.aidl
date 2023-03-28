@@ -3,7 +3,7 @@ package com.example.pureandroid;
 
 // Declare any non-default types here with import statements
 import android.content.pm.ActivityInfo;
-//import com.example.pureandroid.IApplicationCallback;
+import com.example.pureandroid.IOnReceiveMessageListener;
 import android.os.IBinder;
 import android.content.pm.PackageInfo;
 
@@ -18,7 +18,7 @@ interface IMyAidlInterface {
    IBinder getBinder(IBinder binder);
    void setPackageInfo(in PackageInfo packageInfo);
 //    int add(int aInt,int bInt);
-// boolean unregisterApplicationCallback(in IApplicationCallback callback);
+    List<com.example.pureandroid.message.Message> getMessages(in long fromIndex);
 
-//List<ActivityInfo> getReceivers(in String packageName ,int flags);
+    oneway void setOnReceiveMessageListener(in IOnReceiveMessageListener listener);
 }

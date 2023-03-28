@@ -1,7 +1,7 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
  */
-package com.example.mylibrary;
+package com.example.pureandroid.testaidl;
 // Declare any non-default types here with import statements
 
 //////////////////////

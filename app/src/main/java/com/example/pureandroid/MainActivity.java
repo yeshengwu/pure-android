@@ -1,11 +1,10 @@
 package com.example.pureandroid;
 
+import android.Manifest;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -14,20 +13,20 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.os.RemoteException;
 import android.os.StatFs;
 import android.util.Log;
 import android.util.LruCache;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mylibrary.TestB;
 import com.example.mysecondlib.ITestC;
+import com.example.pureandroid.memleak.MyActivity;
+import com.example.pureandroid.testaidl.ChatManager;
+import com.example.pureandroid.testaidl.TestAidlAc;
 
 import java.io.DataInputStream;
 import java.io.FileWriter;
@@ -44,19 +43,49 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import kotlin.jvm.internal.Lambda;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
-    private IMyAidlInterface mMediaServer;
-    private IBinder serviceBinder;
     private Handler mHandler;
 
-    @Override
+    private final String[] permissions = new String[]{
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.INTERNET
+    };
+    private final int PERMISSIONS_RESULT_CODE = 121;// 自定义
+
+
+    /**
+     * 申请权限
+     */
+    private void checkPermission() {
+        // SDK版本 大于或等于23 动态申请权限
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
+        // 检查 未授权 的 权限
+        List<String> pl = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                pl.add(permission);
+            }
+        }
+        // 申请权限
+        if (pl.size() > 0) {
+            ActivityCompat.requestPermissions(this, pl.toArray(new String[0]), PERMISSIONS_RESULT_CODE);
+        }
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TextView textView = findViewById(R.id.test_textview);
+
+        checkPermission();
 
         // kotlin lamba： 是为 lamda函数表达式，内部 为 kotlin.jvm.functions.Function 函数接口，类定义： abstract class Lambda<out R>(override val arity: Int) : FunctionBase<R>, Serializable {}
         Lambda<Integer> lambda = new Lambda<Integer>(1) {
@@ -64,23 +93,23 @@ public class MainActivity extends Activity {
         };
 
         //  {@link TestLang testAndroidSocket}
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ServerSocket mServerSocket = new ServerSocket(9999);
-                    byte[] buffer = new byte[1024];
-                    while (true) {
-                        Socket mClientSocket = mServerSocket.accept();
-                        DataInputStream inputStream = new DataInputStream(mClientSocket.getInputStream());
-                        int len = inputStream.read(buffer);
-                        Log.e(TAG, "ServerSocket read = " + new String(buffer, 0, len, "UTF-8"));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    ServerSocket mServerSocket = new ServerSocket(9999);
+//                    byte[] buffer = new byte[1024];
+//                    while (true) {
+//                        Socket mClientSocket = mServerSocket.accept();
+//                        DataInputStream inputStream = new DataInputStream(mClientSocket.getInputStream());
+//                        int len = inputStream.read(buffer);
+//                        Log.e(TAG, "ServerSocket read = " + new String(buffer, 0, len, "UTF-8"));
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,8 +138,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(MainActivity.this, TestAidlServer.class);
-                bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+                Intent intent = new Intent(MainActivity.this, TestAidlAc.class);
+                startActivity(intent);
 
 //                Intent intent = new Intent(MainActivity.this, TestLayoutAc.class);
 //                startActivity(intent);
@@ -123,7 +152,7 @@ public class MainActivity extends Activity {
 //                Intent intent3 = new Intent(MainActivity.this, TestLiveDataAc.class);
 //                startActivity(intent3);
 
-                Intent intent4 = new Intent(MainActivity.this, TestHandlerAc.class);
+               /* Intent intent4 = new Intent(MainActivity.this, TestHandlerAc.class);
                 startActivity(intent4);
 
                 SparseArray<String> stringSparseArray = new SparseArray<>();
@@ -139,7 +168,7 @@ public class MainActivity extends Activity {
                 Log.d("evan", "stringSparseArray append then 3->e" + stringSparseArray);
 
                 stringSparseArray.append(4, "f");
-                Log.d("evan", "stringSparseArray append  4->f" + stringSparseArray);
+                Log.d("evan", "stringSparseArray append  4->f" + stringSparseArray);*/
 
                 Log.e("evan", "this = " + this);
 
@@ -151,21 +180,28 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "clicked 2", Toast.LENGTH_SHORT).show();
+                Intent intent4 = new Intent(MainActivity.this, MyActivity.class);
+                startActivity(intent4);
 
-                try {
-                    if (mMediaServer != null) {
-                        mMediaServer.basicTypes(1, 100L, false, 0.5f, 1d, "string");
-//                        int sum = mMediaServer.add(1,2);
-                        IBinder binder = mMediaServer.getBinder(serviceBinder);
-//                        Log.e(TAG,"sum 1 + 2 = "+sum);
-                        Log.e(TAG, "sum binder = " + binder);
-                        PackageInfo packageInfo = new PackageInfo();
-                        Log.e(TAG, "sum packageInfo = " + packageInfo.hashCode());
-                        mMediaServer.setPackageInfo(packageInfo);
-                    }
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+                //  {@link TestLang testAndroidSocket}
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            Socket mSocket = new Socket("192.168.1.101", 8080);
+//                            byte[] buffer = new byte[256];
+//                            DataOutputStream dos = new DataOutputStream(mSocket.getOutputStream());
+//// 发送数据
+//                            String msg = "I am from phone 127.0.0.1: 8080 msg";
+//                            System.out.println("Client:" + msg);
+//                            dos.write(msg.getBytes("UTF-8"));
+//                            dos.flush();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }).start();
+
             }
         });
 
@@ -260,7 +296,7 @@ public class MainActivity extends Activity {
         // 如果不存在返回空
 
         // 2021-3-4 evan: 头插法，首先 画个 lru 数字测试表哈，经常画的  1 2 3 4 2 1 5 2 3 1 栈大小为3
-        // 那么头插法实现，就是  1 再就2 插入，结果 2->1, 3插入后 3->2->1 4插入发现满了 删除最后一个元素3，然后将4插入头部
+        // 那么头插法实现，就是  1 再就2 插入，结果 2->1, 3插入后 3->2->1 4插入发现满了 删除最后一个元素1，然后将4插入头部
         // 就是 4->3->2  依次类推，关键就是头插法，后插入的做为头就明白了。
 
         LruCache<String, String> lruCache = new LruCache<String, String>(2) {
@@ -640,64 +676,7 @@ public class MainActivity extends Activity {
         super.onDestroy();
 
         Log.e(TAG, "onDestroy");
-        if (mMediaServer != null) {
-            unbindService(mServiceConnection);
-        }
 
+        ChatManager.Instance().shutdown();
     }
-
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Log.e(TAG, "service disconnected. ComponentName = " + name);
-            mMediaServer = null;
-        }
-
-        @Override
-        public void onBindingDied(ComponentName name) {
-            Log.e(TAG, "service disconnected. ComponentName = " + name);
-        }
-
-        @Override
-        public void onNullBinding(ComponentName name) {
-            Log.e(TAG, "service onNullBinding. ComponentName = " + name);
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.e(TAG, "service connected.ComponentName = " + name + " service = " + service);
-            mMediaServer = IMyAidlInterface.Stub.asInterface(service);
-            Log.e(TAG, "service connected.mMediaServer = " + mMediaServer);
-            IBinder aBinder = mMediaServer.asBinder();
-            Log.e(TAG, "service connected.aBinder = " + aBinder);
-            // 跨进程日志:
-            // service connected.ComponentName = ComponentInfo{com.example.pureandroid/com.example.pureandroid.TestAidlServer}
-            // service = android.os.BinderProxy@627fea6
-            // service connected.mMediaServer = com.example.pureandroid.IMyAidlInterface$Stub$Proxy@90230e7
-
-            // 同进程日志：
-            // service connected.ComponentName = ComponentInfo{com.example.pureandroid/com.example.pureandroid.TestAidlServer}
-            // service = com.example.pureandroid.TestAidlServer$1@90230e7
-            // service connected.mMediaServer = com.example.pureandroid.TestAidlServer$1@90230e7
-            // TestAidlServer 那边返回相同：90230e7
-            // E/TestAidlServer: onBind. intent = Intent { cmp=com.example.pureandroid/.TestAidlServer }
-            // return binder = com.example.pureandroid.TestAidlServer$1@90230e7
-
-//            service.pingBinder()
-//            service.isBinderAlive();
-            try {
-                service.linkToDeath(new IBinder.DeathRecipient() {
-                    @Override
-                    public void binderDied() {
-                        Log.e(TAG, "service connected. binderDied");
-                    }
-                }, 0);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-
-        }
-    };
-
 }

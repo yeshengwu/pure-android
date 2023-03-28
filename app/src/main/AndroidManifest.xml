@@ -65,7 +65,7 @@
 
         <!-- android:process=":service"  -->
         <service
-            android:name=".TestAidlServer"
+            android:name=".testaidl.TestAidlServer"
             android:enabled="true"
             android:process=":service"></service>
 
@@ -74,6 +74,11 @@
         <activity
             android:name=".TestHandlerAc"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".testaidl.TestAidlAc"
+            android:screenOrientation="portrait" />
+
 
     </application>
 

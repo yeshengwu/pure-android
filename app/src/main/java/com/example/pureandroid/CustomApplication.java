@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.pureandroid.testaidl.ChatManager;
+import com.example.pureandroid.testaidl.NotInitializedExecption;
+
 import java.lang.reflect.Method;
 
 public class CustomApplication extends Application {
@@ -12,17 +15,22 @@ public class CustomApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
 
-        Log.d("evan","CustomApplication attachBaseContext");
+        Log.d("evan", "CustomApplication attachBaseContext");
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        Log.d("evan","CustomApplication onCreate");
+        Log.d("evan", "CustomApplication onCreate");
 
         if (!tryToInitLeakcanary(this)) {
             return;
+        }
+
+        // 只在主进程初始化 单独的im进程
+        if (AppUtils.getCurProcessName(this).equals(BuildConfig.APPLICATION_ID)) {
+            initWFClient(this);
         }
     }
 
@@ -42,7 +50,7 @@ public class CustomApplication extends Application {
                 if (isInAnalyzerProcess) {
                     // This process is dedicated to LeakCanary for heap analysis.
                     // You should not init your app in this process.
-                    Log.w("evan","isInAnalyzerProcess, return");
+                    Log.w("evan", "isInAnalyzerProcess, return");
                     return false;
                 }
 
@@ -50,7 +58,7 @@ public class CustomApplication extends Application {
                 installMethod.invoke(null, application);
                 // Normal app init code...
             } catch (Exception e) {
-                Log.w("evan","Leakcanary init ERROR : " + e);
+                Log.w("evan", "Leakcanary init ERROR : " + e);
             }
             return true;
         } else {
@@ -58,5 +66,13 @@ public class CustomApplication extends Application {
         }
     }
 
+
+    private void initWFClient(Application application) {
+        try {
+            ChatManager.init(application, "Config.IM_SERVER_HOST");
+        } catch (NotInitializedExecption notInitializedExecption) {
+            notInitializedExecption.printStackTrace();
+        }
+    }
 
 }
