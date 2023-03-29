@@ -69,6 +69,11 @@
             android:enabled="true"
             android:process=":service"></service>
 
+        <service
+            android:name=".testbinder.TestMediaServer"
+            android:enabled="true"
+            android:process=":service"></service>
+
         <service android:name=".TestIntentService"/>
 
         <activity
@@ -77,6 +82,10 @@
 
         <activity
             android:name=".testaidl.TestAidlAc"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".testbinder.TestAidlAc2"
             android:screenOrientation="portrait" />
 
 

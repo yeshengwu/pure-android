@@ -26,7 +26,7 @@ import com.example.mylibrary.TestB;
 import com.example.mysecondlib.ITestC;
 import com.example.pureandroid.memleak.MyActivity;
 import com.example.pureandroid.testaidl.ChatManager;
-import com.example.pureandroid.testaidl.TestAidlAc;
+import com.example.pureandroid.testbinder.TestAidlAc2;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -135,7 +135,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(MainActivity.this, TestAidlAc.class);
+//                Intent intent = new Intent(MainActivity.this, TestAidlAc.class);
+                Intent intent = new Intent(MainActivity.this, TestAidlAc2.class);
                 startActivity(intent);
 
 //                Intent intent = new Intent(MainActivity.this, TestLayoutAc.class);
