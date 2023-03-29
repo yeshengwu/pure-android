@@ -1,4 +1,4 @@
-package com.example.mylibrary.testbinder;
+package com.example.pureandroid.testbinder1;
 
 public class TestHandler {
 

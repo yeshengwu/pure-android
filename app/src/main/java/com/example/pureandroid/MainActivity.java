@@ -28,12 +28,9 @@ import com.example.pureandroid.memleak.MyActivity;
 import com.example.pureandroid.testaidl.ChatManager;
 import com.example.pureandroid.testaidl.TestAidlAc;
 
-import java.io.DataInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

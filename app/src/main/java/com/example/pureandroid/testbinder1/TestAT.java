@@ -1,4 +1,6 @@
-package com.example.mylibrary.testbinder;
+package com.example.pureandroid.testbinder1;
+
+import androidx.annotation.NonNull;
 
 /**
  * test ActivityThread:  取名 TestAT 是为了搜索类时不和 ActivityThread 混一起。
@@ -19,6 +21,32 @@ public class TestAT {
         //                        + " that has not called Looper.prepare()");。
         TestAT activityThread = new TestAT();
         activityThread.attach(false,0);
+
+
+        /**
+         * 测试 AIDL 生成类中，抽象类实例化时 抽象类构造器和父类构造器是否被调用。
+         * 结论是 抽象类和父类都会被调用
+         *
+         * BinderEvan constructor
+         * AbsBinderEvanStub constructor
+         * stub instance = stub toString
+         */
+        AbsBinderEvanStub stub = new AbsBinderEvanStub() {
+
+            @Override
+            public void add(int a, int b) {
+                System.out.println("stub instance IN add:  a = " + a + " b = " + b);
+            }
+
+            @NonNull
+            @Override
+            public String toString() {
+                return "stub toString";
+            }
+        };
+        System.out.println("stub instance = " + stub + " invoke add(1,2)");
+        stub.add(1, 2);
+        // Binder test end.
     }
 
     private void attach(boolean system, long startSeq) {

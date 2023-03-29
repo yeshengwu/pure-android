@@ -10,19 +10,20 @@ import com.example.pureandroid.testaidl.NotInitializedExecption;
 import java.lang.reflect.Method;
 
 public class CustomApplication extends Application {
+    private static final String TAG = "CustomApplication";
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
 
-        Log.d("evan", "CustomApplication attachBaseContext");
+        Log.d(TAG, "CustomApplication attachBaseContext");
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        Log.d("evan", "CustomApplication onCreate");
+        Log.d(TAG, "CustomApplication onCreate");
 
         if (!tryToInitLeakcanary(this)) {
             return;
@@ -32,6 +33,13 @@ public class CustomApplication extends Application {
         if (AppUtils.getCurProcessName(this).equals(BuildConfig.APPLICATION_ID)) {
             initWFClient(this);
         }
+
+        GcUtils.addGcWatcher(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(TAG, "IN on gc");
+            }
+        });
     }
 
     /**

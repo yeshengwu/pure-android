@@ -35,12 +35,32 @@ public class TestAidlAc extends FragmentActivity {
             }
         });
 
-        ChatManager.Instance().addOnReceiveMessageListener(new OnReceiveMessageListener() {
-            @Override
-            public void onReceiveMessage(List<Message> messages, boolean hasMore) {
-                Log.e(TAG, "onReceiveMessage. messages = " + messages + " hasMore = " + hasMore);
-            }
-        });
+
+    }
+
+    /**
+     *  典型的注册没反注册导致的activity内存泄露。
+     */
+    private OnReceiveMessageListener mOnReceiveMessageListener = new OnReceiveMessageListener() {
+        @Override
+        public void onReceiveMessage(List<Message> messages, boolean hasMore) {
+            Log.e(TAG, "onReceiveMessage. messages = " + messages + " hasMore = " + hasMore);
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ChatManager.Instance().addOnReceiveMessageListener(mOnReceiveMessageListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+
+        ChatManager.Instance().removeOnReceiveMessageListener(mOnReceiveMessageListener);
     }
 
 

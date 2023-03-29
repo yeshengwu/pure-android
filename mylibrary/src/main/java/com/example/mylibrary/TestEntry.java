@@ -1,6 +1,5 @@
 package com.example.mylibrary;
 
-import com.example.mylibrary.testbinder.AbsBinderEvanStub;
 import com.example.mylibrary.testconcurrcybook.Father;
 import com.example.mylibrary.testconcurrcybook.NormalClass;
 import com.example.mylibrary.testconcurrcybook.ThisEscape;
@@ -10,8 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-
-import androidx.annotation.NonNull;
 
 public class TestEntry {
 
@@ -50,30 +47,7 @@ public class TestEntry {
         sb = "sb2";
         System.out.println("sa2 = " + sa);
 
-        /**
-         * 测试 AIDL 生成类中，抽象类实例化时 抽象类构造器和父类构造器是否被调用。
-         * 结论是 抽象类和父类都会被调用
-         *
-         * BinderEvan constructor
-         * AbsBinderEvanStub constructor
-         * stub instance = stub toString
-         */
-        AbsBinderEvanStub stub = new AbsBinderEvanStub() {
 
-            @Override
-            public void add(int a, int b) {
-                System.out.println("stub instance IN add:  a = " + a + " b = " + b);
-            }
-
-            @NonNull
-            @Override
-            public String toString() {
-                return "stub toString";
-            }
-        };
-        System.out.println("stub instance = " + stub + " invoke add(1,2)");
-        stub.add(1, 2);
-        // Binder test end.
 
 
 //        TestThread testThread = new TestThread();
